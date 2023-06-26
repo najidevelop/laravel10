@@ -28,25 +28,9 @@
               <div class="card-header">
                 <h3 class="card-title">Add User</h3>
               </div>
-              <!-- /.card-header -->
-              @if(Session::has('success_message'))
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong></strong>{{Session::get('success_message')}}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              @endif
-              @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                        
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
+           
+        
+          
               <!-- form start -->
               <form class="form-horizontal" action="{{url('/cpanel/users/store')}}" enctype="multipart/form-data" method="POST" name="store_user_form" id="store_user_form">
                 @csrf
@@ -262,6 +246,7 @@
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
                   <a class="btn btn-default float-right" href="{{url('cpanel/users/view')}}">Cancel</a>
+                  <button  type="button" class="btn btn-default float-right" id="tclk" >show</button>
                 </div>
                 <!-- /.card-footer -->
               </form>
@@ -274,3 +259,30 @@
       <!-- /.card -->
 
  @endsection
+ 
+
+ @section('showmessagecss')
+   <!-- SweetAlert2 -->
+   <link rel="stylesheet" href="{{url('admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+   <!-- Toastr -->
+   <link rel="stylesheet" href="{{url('admin/plugins/toastr/toastr.min.css')}}"> 
+ @endsection
+ @section('showmessagescript')
+  <!-- SweetAlert2 -->
+<script src="{{url('admin/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+<!-- Toastr -->
+<script src="{{url('admin/plugins/toastr/toastr.min.js')}}"></script>
+<script type="text/javascript">
+  $(function() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+    @if(Session::has('success_message'))
+    toastr.success("{{Session::get('success_message')}}");  
+    @endif
+  });
+</script>
+@endsection

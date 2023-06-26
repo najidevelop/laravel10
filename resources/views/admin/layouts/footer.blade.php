@@ -50,5 +50,5 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('admin/dist/js/demo.js')}}"></script>
 @yield('footerscript')
-
+@yield('showmessagescript')
 </body>

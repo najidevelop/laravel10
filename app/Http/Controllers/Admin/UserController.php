@@ -12,7 +12,8 @@ use Image;
  use Illuminate\Http\RedirectResponse;
  use Illuminate\Support\Facades\Validator;
  use Illuminate\Routing\Redirector;
-use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\Admin\User\UpdateUserRequest;
+use App\Http\Requests\Admin\User\StoreUserRequest;
 class UserController extends Controller
 {
     /**
@@ -32,13 +33,14 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('admin.user.adduser'); 
+       // return view('admin.user.adduser'); 
+          return view('admin.user.adduser'); 
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) 
+    public function store(StoreUserRequest $request) 
     {
  //try{
   //  try{
@@ -46,8 +48,8 @@ class UserController extends Controller
     // validate
    $formdata=$request->all();  
    $validator = Validator::make($formdata,
-   $this->addRules(),
-   $this->addMessages()
+   $request->rules(),
+   $request->messages()
 );
 
 if ($validator->fails()) {
@@ -60,11 +62,6 @@ if ($validator->fails()) {
                 ->withInput();
                
 }else{
-
-
-      
-       
-      
       //  $this->validate($request,$rules,$customMessages);
 
         //email not repeated
@@ -177,9 +174,11 @@ if(is_null($userdb)){
               $extension=$image_tmp->getClientOriginalExtension();
               //Generate new Image Name
               //Hash::make($request->password),
+             // return    $current_photo."not empty";
               if (empty($current_photo)){
+              //  return    $current_photo;
                 //first time
-              $imageName=rand(10000,99999).$user->id.'.'.$extension;
+              $imageName=rand(10000,99999).$userid.'.'.$extension;
               }else{
                 //same old name
                 $imageName= $current_photo;
@@ -197,7 +196,7 @@ if(is_null($userdb)){
             }else{
               $imageName="";
             }
-
+ 
       User::find($userid)->update( [
 'name'=>$formdata['name'],
 'first_name' => $formdata['first_name'],
@@ -211,7 +210,7 @@ if(is_null($userdb)){
 'role' => $formdata['role'],
 'photo' => $imageName,
 ]);
-      //  return    $formdata;
+     
       return redirect()->back()->with('success_message','user has been Updated!');
     }
   }

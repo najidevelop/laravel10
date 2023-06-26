@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="{{url('admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{url('admin/plugins/jqvmap/jqvmap.min.css')}}">
+  @yield('showmessagecss')
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url('admin/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->

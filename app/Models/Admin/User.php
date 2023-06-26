@@ -29,6 +29,7 @@ class User extends Model
 'mobile',
 'phone' ,
 'role' ,
+'photo' ,
     ];
 
     /**
