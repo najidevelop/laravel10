@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Middleware\Role\AdminRole;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,16 +24,20 @@ Route::get('/', function () {
    
 Route::get('lang/change/{lang}', [LangController::class, 'change']);
 Route::get('lang/getLang', [LangController::class, 'getLang']);
-Route::get('cpanel', [AdminController::class, 'index']);
+//Route::get('cpanel', [AdminController::class, 'index']);
 
-//cpanel
-Route::prefix('cpanel')->group(function () {
-    Route::get('', [AdminController::class, 'index']);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-//Users
+//Route::get('/cpanel', [AdminController::class, 'index'])->middleware(AdminRole::class);
+//cpanel
+//Route::prefix('cpanel')->group(function () {
+   //Route::middleware(['auth', 'verified','role.admin'])->prefix('cpanel')->group(function () {
+ Route::middleware(['role.admin','auth', 'verified'])-> prefix('cpanel')->group(function () {
+     Route::get('', [AdminController::class, 'index']);
+    //Users
 Route::prefix('/users')->group(function () {
     Route::get('/view', [UserController::class, 'index'])->name('cpanel.users.view');
     Route::get('/add', [UserController::class, 'create']);
@@ -42,6 +47,7 @@ Route::prefix('/users')->group(function () {
     Route::get('/delete/{userid}', [UserController::class, 'destroy']);
 });
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
