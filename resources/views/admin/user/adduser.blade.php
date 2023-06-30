@@ -28,9 +28,6 @@
               <div class="card-header">
                 <h3 class="card-title">Add User</h3>
               </div>
-           
-        
-          
               <!-- form start -->
               <form class="form-horizontal" action="{{url('/cpanel/users/store')}}" enctype="multipart/form-data" method="POST" name="store_user_form" id="store_user_form">
                 @csrf
@@ -226,10 +223,8 @@
                     <div class="col-sm-10">
 
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input  @error('first_name')  is-invalid  @enderror " name="photo" id="photo" value="{{old('photo')}}"      
-                         @error('photo')  
-                      describedby="photo-error" aria-invalid="true"  
-                      @enderror >
+                      <input type="file" class="custom-file-input" name="photo" id="photo"     
+                         >
                       <label class="custom-file-label" for="photo">Choose file</label>
                       @error('photo')  
                       <span id="photo-error" class="error invalid-feedback">{{ $message }}</span>
@@ -246,7 +241,7 @@
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
                   <a class="btn btn-default float-right" href="{{url('cpanel/users/view')}}">Cancel</a>
-                  <button  type="button" class="btn btn-default float-right" id="tclk" >show</button>
+                   
                 </div>
                 <!-- /.card-footer -->
               </form>

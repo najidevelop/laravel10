@@ -26,7 +26,7 @@
        <!-- Horizontal Form -->
       <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Add User</h3>
+                <h3 class="card-title">Edit User</h3>
               </div>
            
               @if ($errors->any())
@@ -48,7 +48,20 @@
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->name}}" name="name" id="name" placeholder="Name">
+                      <input type="text" class="form-control  
+                      @error('name')  is-invalid  @enderror "
+                     
+                      @error('name')  
+                      describedby="name-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('name')}}" @else value="{{$user->name}}"
+                      @endif
+                       name="name" id="name" placeholder="Name"                    
+                      >
+                      @error('name')  
+                      <span id="name-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- name end -->
@@ -58,7 +71,18 @@
                 <div class="form-group row">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->first_name}}" name="first_name"   id="first_name" placeholder="first_name">
+                      <input type="text" class="form-control @error('first_name')  is-invalid  @enderror "
+                     
+                      @error('first_name')  
+                      describedby="first_name-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('first_name')}}" @else value="{{$user->first_name}}"
+                      @endif  
+                       name="first_name"   id="first_name" placeholder="first_name">
+                      @error('first_name')  
+                      <span id="first_name-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- first_name end -->
@@ -67,7 +91,18 @@
                 <div class="form-group row">
                     <label for="last_name" class="col-sm-2 col-form-label">Last name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->last_name}}" name="last_name" id="last_name" placeholder="last_name">
+                      <input type="text" class="form-control @error('last_name')  is-invalid  @enderror "
+                     
+                      @error('last_name')  
+                      describedby="last_name-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('last_name')}}" @else value="{{$user->last_name}}"
+                      @endif 
+                        name="last_name" id="last_name" placeholder="last_name">
+                      @error('last_name')  
+                      <span id="last_name-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- last_name end -->
@@ -75,7 +110,18 @@
                   <div class="form-group row">
                     <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-10">
-                      <input type="email"  name="email"  value="{{$user->email}}" class="form-control" id="email" placeholder="Email">
+                      <input type="email"  name="email"    class="form-control @error('email')  is-invalid  @enderror "
+                     
+                      @error('email')  
+                      describedby="email-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('email')}}" @else value="{{$user->email}}"
+                      @endif 
+                       id="email" placeholder="Email">
+                      @error('email')  
+                      <span id="email-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- Email end -->
@@ -85,7 +131,18 @@
                 <div class="form-group row">
                     <label for="address" class="col-sm-2 col-form-label">Address</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->address}}" name="address" id="address" placeholder="address">
+                      <input type="text" class="form-control @error('address')  is-invalid  @enderror "
+                     
+                      @error('address')  
+                      describedby="address-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('address')}}" @else value="{{$user->address}}"
+                      @endif 
+                        name="address" id="address" placeholder="address">
+                      @error('address')  
+                      <span id="address-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- first_name end -->
@@ -93,7 +150,18 @@
                 <div class="form-group row">
                     <label for="country" class="col-sm-2 col-form-label">Country</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->country}}" name="country" id="country" placeholder="country">
+                      <input type="text" class="form-control @error('country')  is-invalid  @enderror "
+                     
+                      @error('country')  
+                      describedby="country-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('country')}}" @else value="{{$user->country}}"
+                      @endif 
+                        name="country" id="country" placeholder="country">
+                      @error('country')  
+                      <span id="country-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- first_name end -->
@@ -101,7 +169,17 @@
                 <div class="form-group row">
                     <label for="city" class="col-sm-2 col-form-label">city</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->city}}" name="city" id="city" placeholder="City">
+                      <input type="text" class="form-control @error('city')  is-invalid  @enderror "
+                     
+                      @error('city')  
+                      describedby="city-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('city')}}" @else value="{{$user->city}}"
+                      @endif    name="city" id="city" placeholder="City">
+                      @error('city')  
+                      <span id="city-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- city end -->
@@ -109,7 +187,18 @@
                 <div class="form-group row">
                     <label for="mobile" class="col-sm-2 col-form-label">Mobile</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control"  value="{{$user->mobile}}" name="mobile" id="mobile" placeholder="mobile">
+                      <input type="text" class="form-control   @error('mobile')  is-invalid  @enderror "
+                     
+                      @error('mobile')  
+                      describedby="mobile-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any())
+                      value="{{old('mobile')}}" @else value="{{$user->mobile}}"
+                      @endif 
+                       name="mobile" id="mobile" placeholder="mobile">
+                      @error('mobile')  
+                      <span id="mobile-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- mobile end -->
@@ -117,22 +206,40 @@
                 <div class="form-group row">
                     <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{$user->phone}}" name="phone" id="phone" placeholder="Phone">
+                      <input type="text" class="form-control  @error('phone')  is-invalid  @enderror "
+                     
+                      @error('phone')  
+                      describedby="phone-error" aria-invalid="true"  
+                      @enderror 
+                      @if ($errors->any()) 
+                      value="{{old('phone')}}" @else value="{{$user->phone}}"
+                      @endif    name="phone" id="phone" placeholder="Phone">
+                      @error('phone')  
+                      <span id="phone-error" class="error invalid-feedback">{{ $message }}</span>
+                      @enderror  
                     </div>
                   </div>
                     <!-- phone end -->
                            <!-- role start -->
                 <div class="form-group row">
-                  <label for="role" class="col-sm-2 col-form-label" >Select Role</label>                             
+                  <label for="role" class="col-sm-2 col-form-label  @error('role')  is-invalid  @enderror "            
+                  @error('role')  
+                  describedby="role-error" aria-invalid="true"  
+                  @enderror 
+                     >Select Role</label>                             
                         <div class="col-sm-10">
                         <select class="form-control"  name="role" id="role" >                       
-                          <option value="admin"    @if ($user->role=='admin') selected="selected" @endif >Admin</option>
-                          <option value="manager"  @if ($user->role=='manager') selected="selected" @endif >Manager</option>
-                          <option value="supervisor"  @if ($user->role=='supervisor') selected="selected" @endif >Supervisor</option>
-                          <option value="customer"  @if ($user->role=='customer') selected="selected" @endif >Customer</option>                          
+                          <option value="admin"    @if (($errors->any() && old('role')=='admin')) selected="selected"
+                            @elseif ($user->role=='admin') selected="selected" @endif >Admin</option>
+                          <option value="manager"  @if (($errors->any() && old('role')=='manager'))  selected="selected"
+                            @elseif ($user->role=='manager') selected="selected" @endif >Manager</option>
+                          <option value="supervisor"   @if (($errors->any() && old('role')=='supervisor'))  selected="selected"
+                            @elseif ($user->role=='supervisor') selected="selected" @endif>Supervisor</option>
+                          <option value="customer"   @if (($errors->any() && old('role')=='customer'))  selected="selected"
+                            @elseif ($user->role=='customer') selected="selected" @endif>Customer</option>                          
                         </select>
                       </div>
-                       
+ 
                     </div>
                     <!-- role end -->
                            <!-- first_name start -->

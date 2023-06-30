@@ -17,17 +17,17 @@
     </head>
     <body class="antialiased">
        
-        <a href="{{ url('/user') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">user</a>
+        <a href="{{ url('/user') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">user</a>
             
  <div>{{ __('messages.reset') }}</div>
- <a href="{{url('lang/change/en') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">en</a>
- <a href="{{ url('lang/change/ar') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">ar</a>  
+ <a href="{{url('lang/change/en') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">en</a>
+ <a href="{{ url('lang/change/ar') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">ar</a>  
  
  <div>
  
  {{Session::get('locale');}}
  
-<a href="{{ url('lang/getLang') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">current lang</a>  
+<a href="{{ url('lang/getLang') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">current lang</a>  
 </div>
     </body>
 </html>
