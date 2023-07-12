@@ -228,15 +228,16 @@
                   @enderror 
                      >Select Role</label>                             
                         <div class="col-sm-10">
+                       
                         <select class="form-control"  name="role" id="role" >                       
-                          <option value="admin"    @if (($errors->any() && old('role')=='admin')) selected="selected"
-                            @elseif ($user->role=='admin') selected="selected" @endif >Admin</option>
+                          <option value="admin" @if (( old('role')=='admin'))selected="selected"
+                          @elseif ($user->role=='admin'&& !$errors->any()) selected="selected" @endif>Admin</option>
                           <option value="manager"  @if (($errors->any() && old('role')=='manager'))  selected="selected"
-                            @elseif ($user->role=='manager') selected="selected" @endif >Manager</option>
+                            @elseif ($user->role=='manager'&& !$errors->any()) selected="selected" @endif >Manager</option>
                           <option value="supervisor"   @if (($errors->any() && old('role')=='supervisor'))  selected="selected"
-                            @elseif ($user->role=='supervisor') selected="selected" @endif>Supervisor</option>
+                            @elseif ($user->role=='supervisor'&& !$errors->any()) selected="selected" @endif>Supervisor</option>
                           <option value="customer"   @if (($errors->any() && old('role')=='customer'))  selected="selected"
-                            @elseif ($user->role=='customer') selected="selected" @endif>Customer</option>                          
+                            @elseif ($user->role=='customer' && !$errors->any()) selected="selected" @endif>Customer</option>                          
                         </select>
                       </div>
  

@@ -144,6 +144,36 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
+        <!-- User Menu -->
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+          <img src="{{url('admin/images/users',[(Session::get('loguser'))->photo])}}" class="user-image img-circle elevation-2" alt="User Image">
+          <span class="d-none d-md-inline"> {{ (Session::get('loguser'))->name }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <!-- User image -->
+          <li class="user-header bg-primary">
+            <img  src="{{url('admin/images/users',[(Session::get('loguser'))->photo])}}" class="img-circle elevation-2" alt="User Image">
+
+            <p>
+              Alexander Pierce - Web Developer
+              <small>Member since Nov. 2012</small>
+            </p>
+          </li>
+          <!-- Menu Body -->
+          
+          <!-- Menu Footer-->
+          <li class="user-footer">
+            <a href="#" class="btn btn-default btn-flat">Profile</a>           
+            <form method="POST" action="{{ route('logout') }}" class="btn btn-default btn-flat float-right">
+              @csrf
+            <a href="{{route('logout')}}"  onclick="event.preventDefault();  this.closest('form').submit();" >{{ __('Log Out') }}</a>
+          </form>
+            <!-- Authentication -->
+ 
+          </li>
+        </ul>
+      </li>
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
