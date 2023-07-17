@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Post\CategoryController;
+use App\Http\Controllers\Post\PostController;
 use App\Http\Middleware\Role\AdminRole;
 /*
 |--------------------------------------------------------------------------
@@ -31,11 +33,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-//Route::get('/cpanel', [AdminController::class, 'index'])->middleware(AdminRole::class);
+
 //cpanel
-//Route::prefix('cpanel')->group(function () {
-   //Route::middleware(['auth', 'verified','role.admin'])->prefix('cpanel')->group(function () {
- Route::middleware(['role.admin','auth', 'verified'])-> prefix('cpanel')->group(function () {
+Route::middleware(['role.admin','auth', 'verified'])-> prefix('cpanel')->group(function () {
+ //Route::prefix('cpanel')->group(function () {
      Route::get('', [AdminController::class, 'index']);
     //Users
 Route::prefix('/users')->group(function () {
@@ -45,7 +46,19 @@ Route::prefix('/users')->group(function () {
     Route::get('/edit/{userid}', [UserController::class, 'edit']);
     Route::post('/update/{userid}', [UserController::class, 'update']);
     Route::get('/delete/{userid}', [UserController::class, 'destroy']);
+
 });
+    //CATEGORY
+Route::prefix('/category')->group(function () {
+    Route::get('/view', [CategoryController::class, 'index'])->name('cpanel.category.view');
+    Route::get('/add', [CategoryController::class, 'create']);
+    Route::post('/store', [CategoryController::class, 'store']);
+    Route::get('/edit/{itemid}', [CategoryController::class, 'edit']);
+    Route::post('/update/{itemid}', [CategoryController::class, 'update']);
+    Route::get('/delete/{itemid}', [CategoryController::class, 'destroy']);
+    
+});
+
 });
 
 Route::middleware('auth')->group(function () {

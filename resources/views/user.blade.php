@@ -25,7 +25,7 @@
  
  <div>
  
- {{Session::get('locale');}}
+ {{Session::get('locale')}}
  
 <a href="{{ url('lang/getLang') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">current lang</a>  
 </div>

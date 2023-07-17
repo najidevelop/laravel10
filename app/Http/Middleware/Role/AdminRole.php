@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+//use App\Http\Controllers\Post\CategoryController;
 class AdminRole  
 {
     /**
@@ -19,16 +20,21 @@ class AdminRole
     {
       //  if(Auth::user()->role=='admin'){
         $x=1;
-         if((Session::get('loguser'))->role=='admin'){
-                  //strcmp($name1, $name2)
- 
-                  return $next($request);
-          // return redirect()->route('login');
-           
+        if(Session::has('loguser')){
+          if((Session::get('loguser'))->role=='admin'){
+            //strcmp($name1, $name2)
+
+            return $next($request);
+    // return redirect()->route('login');
+     
+  }else{
+      return redirect('/');
+    //  return redirect('/dashboard');
+  }
         }else{
-            return redirect('/');
-          //  return redirect('/dashboard');
+        return redirect()->route('login');
         }
+        
     //   return  redirect()->intended('login');
    // return redirect('/dashboard');
    

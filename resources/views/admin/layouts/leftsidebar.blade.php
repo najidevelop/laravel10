@@ -62,14 +62,61 @@
              
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+          <li class="nav-item has-treeview ">
+            <a href="#" class="nav-link ">
+               
+              <i class="nav-icon fa fa-file" aria-hidden="true"  ></i>
               <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
+              Posts
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link ">
+                  <i class="far fa fa-folder nav-icon" aria-hidden="true"></i>
+                  <p>Category
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ url('/cpanel/category/view') }}" class="nav-link">
+                      <i class="far fa fa-list-alt nav-icon"></i>
+                      <p>View</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ url('/cpanel/category/add') }}" class="nav-link">
+                      <i class="far fa fa-plus-square nav-icon"></i>
+                      <p>Add</p>
+                    </a>
+                  </li>                  
+                </ul>
+              </li>
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link ">
+                  <i class="far fa fa-file"></i>
+                  <p>Post
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ url('/cpanel/post/view') }}"  class="nav-link">
+                      <i class="far fa fa-list-alt nav-icon"></i>
+                      <p>View</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ url('/cpanel/post/add') }}" class="nav-link">
+                      <i class="far fa fa-plus-square nav-icon"></i>
+                      <p>Add</p>
+                    </a>
+                  </li>                  
+                </ul>
+              </li>
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
