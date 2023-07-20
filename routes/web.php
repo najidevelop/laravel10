@@ -28,11 +28,12 @@ Route::get('lang/change/{lang}', [LangController::class, 'change']);
 Route::get('lang/getLang', [LangController::class, 'getLang']);
 //Route::get('cpanel', [AdminController::class, 'index']);
 
-
+ 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+     return view('dashboard');
+   // Route::get('', [AdminController::class, 'index']);
 })->middleware(['auth', 'verified'])->name('dashboard');
-
+ 
 
 //cpanel
 Route::middleware(['role.admin','auth', 'verified'])-> prefix('cpanel')->group(function () {

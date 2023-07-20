@@ -18,8 +18,8 @@ class UpdateCategoryRequest extends FormRequest
     {
   
        return[
-         'title'=>'required|alpha_num:ascii|unique:categories,title',        
-         
+        // 'title'=>'required|alpha_num:ascii|unique:categories,title',        
+         'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u',  
        ];   
     
     }
@@ -36,7 +36,7 @@ public function messages(): array
    return[
      'title.required'=>'The title is required',
      'title.alpha_num'=>'The title format must be alphabet',
-     'title.unique'=>'The title is already exist',
+      
    
     ];
     

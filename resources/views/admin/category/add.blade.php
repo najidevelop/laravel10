@@ -62,13 +62,13 @@
 
                     <!-- name end -->
                     <div class="form-group row">
-                      <label for="slug" class="col-sm-2 col-form-label">title</label>
+                      <label for="slug" class="col-sm-2 col-form-label">Slug</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control 
-                        @error('title')  is-invalid  @enderror "
-                          name="slug" id="slug" placeholder="* slug" value="{{old('title')}}"
-                          @error('title')  
-                        describedby="title-error" aria-invalid="true"  
+                        @error('slug')  is-invalid  @enderror "
+                          name="slug" id="slug" placeholder="* slug" value="{{old('slug')}}"
+                          @error('slug')  
+                        describedby="slug-error" aria-invalid="true"  
                         @enderror                  
                         >
                         @error('slug')  
@@ -76,7 +76,7 @@
                          @enderror                  
                       </div>
                     </div>
-                               <!-- role start -->
+                               <!-- parent_id start -->
                 <div class="form-group row">
                   <label for="parent_id" class="col-sm-2 col-form-label"  @error('parent_id')  
                   describedby="parent_id-error" aria-invalid="true"  

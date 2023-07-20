@@ -23,8 +23,10 @@ class StoreCategoryRequest extends FormRequest
     {
   
        return[
-         'title'=>'required|alpha_num|unique:categories,title',        
-         
+       'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
+       'slug'=>'unique:categories,slug',   
+         //     'title'=>'required|alpha_num|unique:categories,title',      
+     
        ];   
     
     }
@@ -39,10 +41,11 @@ public function messages(): array
    $minMobileLength=10;
    $maxMobileLength=15;
    return[
-     'title.required'=>'The title is required',
-     'title.alpha_num'=>'The title format must be alphabet',
-     'title.unique'=>'The title is already exist',
-   
+     'title.required'=>'The Title is required',
+    // 'title.alpha_num'=>'The title format must be alphabet',
+     'title.regex'=>'The Title format must be alphabet',
+     'title.unique'=>'The Title is already exist',
+     'slug.unique'=>'The Slug is already exist',
     ];
     
 }

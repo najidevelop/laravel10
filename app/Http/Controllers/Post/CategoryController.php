@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
 use App\Http\Requests\Admin\Category\StoreCategoryRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
     public function index()
@@ -58,19 +59,23 @@ if ($validator->fails()) {
                 ->withInput();
                
 }else{
-
+if(  $formdata['slug']=="" ||empty($formdata['slug'])){
+$tmpslug=$formdata['title'];
+}else{
+  $tmpslug=$formdata['slug'];
+}
 
         $object = new Category;
         $object->title = $formdata['title'];
         $object->desc = $formdata['desc'];
-       
+        $object->slug =Str::slug($tmpslug);
         $object->parent_id = $formdata['parent_id'];
         $object->sequence =0;   
         $object->save();
         //save photo
       
        //  $user->id;
-         return redirect()->back()->with('success_message','user has been Added!');
+         return redirect()->back()->with('success_message','Category has been Added!');
     } 
 
     }
@@ -86,9 +91,11 @@ if ($validator->fails()) {
     public function edit($itemid)
     {
         $item= DB::table('categories')->find($itemid);
-
+        $List=DB::table('categories') ->select('id','title','desc','parent_id')->get();
+     
+        $parents= $this->categorytree( $List);
         //
- return view('admin.category.edit',['category' => $item]); 
+ return view('admin.category.edit',['category' => $item,'categories' => $parents]); 
     }
 
     /**
@@ -116,12 +123,17 @@ if ($validator->fails()) {
 
  
 //update photo
-        
+if(  $formdata['slug']=="" ||empty($formdata['slug'])){
+  $tmpslug=$formdata['title'];
+  }else{
+    $tmpslug=$formdata['slug'];
+  }
       Category::find($itemid)->update( [
-'name'=>$formdata['title'],
+'title'=>$formdata['title'],
+'slug'=>Str::slug($tmpslug),
 'desc' => $formdata['desc'],
 'parent_id' => $formdata['parent_id'],
-'sequence' => $formdata['sequence'], 
+//'sequence' => $formdata['sequence'], 
 ]);
      
       return redirect()->back()->with('success_message','Category has been Updated!');
