@@ -49,7 +49,7 @@ Route::prefix('/users')->group(function () {
     Route::get('/delete/{userid}', [UserController::class, 'destroy']);
 
 });
-    //CATEGORY
+    //CATEGORY cpanel/category
 Route::prefix('/category')->group(function () {
     Route::get('/view', [CategoryController::class, 'index'])->name('cpanel.category.view');
     Route::get('/add', [CategoryController::class, 'create']);
@@ -57,7 +57,9 @@ Route::prefix('/category')->group(function () {
     Route::get('/edit/{itemid}', [CategoryController::class, 'edit']);
     Route::post('/update/{itemid}', [CategoryController::class, 'update']);
     Route::get('/delete/{itemid}', [CategoryController::class, 'destroy']);
-    
+    Route::get('/sort', [CategoryController::class, 'sort']);
+    Route::post('/updatesort/{itemid}', [CategoryController::class, 'updatesort'])->name('cpanel.category.updatesort');
+    Route::get('/getsortbyid/{itemid}', [CategoryController::class, 'getsortbyid']) ;
 });
 
 });

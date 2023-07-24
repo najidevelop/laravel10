@@ -19,7 +19,7 @@ class AdminRole
     public function handle(Request $request, Closure $next): Response
     {
       //  if(Auth::user()->role=='admin'){
-        $x=1;
+      //  $x=1;
         if(Session::has('loguser')){
           if((Session::get('loguser'))->role=='admin'){
             //strcmp($name1, $name2)

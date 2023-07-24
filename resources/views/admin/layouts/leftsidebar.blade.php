@@ -91,7 +91,13 @@
                       <i class="far fa fa-plus-square nav-icon"></i>
                       <p>Add</p>
                     </a>
-                  </li>                  
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ url('/cpanel/category/sort') }}" class="nav-link">
+                      <i class="far fa fa-plus-square nav-icon"></i>
+                      <p>Sorting</p>
+                    </a>
+                  </li>                   
                 </ul>
               </li>
               <li class="nav-item has-treeview">

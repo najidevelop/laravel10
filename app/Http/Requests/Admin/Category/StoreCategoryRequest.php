@@ -23,7 +23,8 @@ class StoreCategoryRequest extends FormRequest
     {
   
        return[
-       'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
+       'title'=>'required|unique:categories,title',   
+     //  'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
        'slug'=>'unique:categories,slug',   
          //     'title'=>'required|alpha_num|unique:categories,title',      
      

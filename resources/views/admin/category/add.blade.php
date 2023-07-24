@@ -107,7 +107,8 @@
                       </div>
                        
                     </div>
-                    <!-- role end --> 
+                    <!-- parent_id end --> 
+                    
                         <!-- desc start -->
               
                         <div class="form-group row">
@@ -123,7 +124,8 @@
                   </div>
                     <!-- desc end -->
                           </div>
-                <!-- /.card-body -->
+               
+                          <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
                   <a class="btn btn-default float-right" href="{{url('cpanel/category/view')}}">Cancel</a>

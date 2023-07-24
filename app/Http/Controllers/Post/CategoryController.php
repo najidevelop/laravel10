@@ -20,7 +20,51 @@ class CategoryController extends Controller
   
    return view('admin.category.show',['categories' => $List]); 
     }
+    public function sort()
+    {
+        //
 
+        $List=DB::table('categories')->where('parent_id',0) ->get();
+  
+   return view('admin.category.sort',['categories' => $List]); 
+    }
+
+    public function updatesort(Request $request,$itemid)
+    {
+        //
+      //  $data = json_decode($request->getContent(),true);
+      $data= json_decode($request->getContent(), true);
+    //  $data =   $request->json()->all();
+      $collection=collect($data);
+    //$res=  $collection->first()['id'];
+    foreach($collection as $row){
+     if(isset($row['children']))
+     {
+      $res=$row['id'];
+      } 
+    }
+   
+     
+       //  $ss=collect($data)->implode(',');
+       // $data=Str::of($data)->toHtmlString();
+     //   $List=DB::table('categories') ->get();
+  //$js= response()->json($data);
+  return  $res;
+  // return response()->json(['success' => true, 'message' => $js  ]);
+    }
+
+    public function getsortbyid($itemid)
+    { 
+//$categoryTree=new Collection();
+//$list=$this->getsons($itemid);
+//$this->getsonstree($list);
+$List=DB::table('categories')->select('id','title','parent_id')->get();
+$categories=collect($List);
+$categoryTree = $this->buildCategoryTree($List,$itemid);
+//$list= $List=DB::table('categories')->where('parent_id',$itemid)->select('id','title','parent_id')->get();
+ // return  $itemid;
+  return response()->json($categoryTree);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -193,12 +237,67 @@ protected $parentcollection ;
  
     }
     public function getsons( $categoryId) {    
-      if($categoryId!=0 && $categoryId!=null )
+      if($categoryId!=null )
       {
-        $sons=  DB::table('categories')->where('parent_id', $categoryId)->get();
+        $sons=  DB::table('categories')->select('id','title','parent_id')->where('parent_id', $categoryId)->get();
         return $sons;
       } else 
       {return null;}
+    }
+    public function getsonstree($parentList) {    
+      $soncollection=new Collection();
+      if($parentList!=null )
+      {
+        $this->parentcollection=new Collection();
+        $this->parentcollection=collect($parentList);
+       
+      foreach($parentList as $parent){
+        $soncollection= $this->getsons($parent->id);
+        $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
+       //   $item['children']->push($soncollection);  
+       //$item->title="xx";
+       $item->children=$soncollection;
+          return $item;
+      });  
+        }
+        
+        return $this->parentcollection;
+      } else 
+      {return null;}
+    }
+    public function getsonstreeTmp($parentId) {
+      $sonList  = $this->getsons($parentId);
+  
+      $soncollection=new Collection();
+      if($sonList!=null )
+      {
+        $this->parentcollection=new Collection();
+        $this->parentcollection=collect($sonList);
+       
+      foreach($sonList as $parent){
+        $soncollection= $this->getsons($parent->id);
+        $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
+       //   $item['children']->push($soncollection);  
+       //$item->title="xx";
+       $item->children=$soncollection;
+          return $item;
+      });  
+        }
+        
+        return $this->parentcollection;
+      } else 
+      {return null;}
+    }
+    public function loopofSons($parentList) {  
+      foreach($parentList as $parent){
+        $soncollection= $this->getsons($parent->id);
+        $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
+       //   $item['children']->push($soncollection);  
+       //$item->title="xx";
+       $item->children=$soncollection;
+          return $item;
+      });  
+        }
     }
     public function updateParentofSons($categoryId,$newParentId) {    
       if($categoryId!=null )
@@ -210,4 +309,23 @@ protected $parentcollection ;
       } else 
       {return false;}
     }
+    
+function buildCategoryTree($categories, $parentId = 0)
+{
+    $result = new Collection;
+
+    foreach ($categories as $category) {
+        if ($category->parent_id == $parentId) {
+            $children = $this->buildCategoryTree($categories, $category->id);
+
+            if ($children->isNotEmpty()) {
+                $category->children = $children;
+            }
+
+            $result->push($category);
+        }
+    }
+
+    return $result;
+}
 }

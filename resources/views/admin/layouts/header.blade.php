@@ -4,6 +4,7 @@
   <title>AdminLTE 3 | Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{url('admin/plugins/fontawesome-free/css/all.min.css')}}">
   
@@ -24,6 +25,9 @@
   <link rel="stylesheet" href="{{url('admin/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{url('admin/plugins/summernote/summernote-bs4.css')}}">
+
+      <!-- Custom Css -->
+      <link href="{{url('admin/css/style.css')}}" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
