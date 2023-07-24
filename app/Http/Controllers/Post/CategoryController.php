@@ -37,28 +37,39 @@ class CategoryController extends Controller
     //  $data =   $request->json()->all();
       $collection=collect($data);
     //$res=  $collection->first()['id'];
-    foreach($collection as $row){
-     if(isset($row['children']))
-     {
-      $res=$row['id'];
-      } 
+    /*
+   $res="";
+    foreach($collection as $itemrow){ 
+      $res.=$itemrow['id']."-";
+    
     }
-   
-     
-       //  $ss=collect($data)->implode(',');
-       // $data=Str::of($data)->toHtmlString();
-     //   $List=DB::table('categories') ->get();
-  //$js= response()->json($data);
-  return  $res;
+   // return $res;
+   */
+   $this->updatetreesequence($collection,0,(int)$itemid);
+return 'success';
   // return response()->json(['success' => true, 'message' => $js  ]);
+    }
+    public function updatetreesequence($item,int $i,$parentid)
+    {
+      foreach($item as $itemrow){ 
+        Category::find(($itemrow['id']))
+        ->update([ 
+        'parent_id' =>$parentid,
+         'sequence' => $i, 
+        ]);
+        $i++;
+        if(isset($itemrow['children'])&& count($itemrow['children'])>0)
+        {
+          $this->updatetreesequence($itemrow['children'],$i,$itemrow['id'] );
+    }
+    
+  }
     }
 
     public function getsortbyid($itemid)
     { 
-//$categoryTree=new Collection();
-//$list=$this->getsons($itemid);
-//$this->getsonstree($list);
-$List=DB::table('categories')->select('id','title','parent_id')->get();
+$List=DB::table('categories')->select('id','title','parent_id','sequence') ->orderBy('parent_id', 'asc')
+->orderBy('sequence', 'asc')->get();
 $categories=collect($List);
 $categoryTree = $this->buildCategoryTree($List,$itemid);
 //$list= $List=DB::table('categories')->where('parent_id',$itemid)->select('id','title','parent_id')->get();
@@ -70,7 +81,6 @@ $categoryTree = $this->buildCategoryTree($List,$itemid);
      */
     public function create()
     {
-      
       $List=DB::table('categories') ->select('id','title','desc','parent_id')->get();
      
       $parents= $this->categorytree( $List);
@@ -253,6 +263,7 @@ protected $parentcollection ;
        
       foreach($parentList as $parent){
         $soncollection= $this->getsons($parent->id);
+        //update item in collection
         $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
        //   $item['children']->push($soncollection);  
        //$item->title="xx";
@@ -265,40 +276,8 @@ protected $parentcollection ;
       } else 
       {return null;}
     }
-    public function getsonstreeTmp($parentId) {
-      $sonList  = $this->getsons($parentId);
-  
-      $soncollection=new Collection();
-      if($sonList!=null )
-      {
-        $this->parentcollection=new Collection();
-        $this->parentcollection=collect($sonList);
-       
-      foreach($sonList as $parent){
-        $soncollection= $this->getsons($parent->id);
-        $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
-       //   $item['children']->push($soncollection);  
-       //$item->title="xx";
-       $item->children=$soncollection;
-          return $item;
-      });  
-        }
-        
-        return $this->parentcollection;
-      } else 
-      {return null;}
-    }
-    public function loopofSons($parentList) {  
-      foreach($parentList as $parent){
-        $soncollection= $this->getsons($parent->id);
-        $this->parentcollection->where('id',$parent->id)->transform(function ($item) use ($soncollection) {
-       //   $item['children']->push($soncollection);  
-       //$item->title="xx";
-       $item->children=$soncollection;
-          return $item;
-      });  
-        }
-    }
+     
+    
     public function updateParentofSons($categoryId,$newParentId) {    
       if($categoryId!=null )
       {

@@ -72,50 +72,9 @@
                    
                 </div>
                 <div class="body">
-                    <div class="clearfix m-b-20" id="sortbody">
-                        <div class="dd">
-                            <ol class="dd-list">
-                                <li class="dd-item" data-id="1">
-                                    <div class="dd-handle">Item 1</div>
-                                </li>
-                                <li class="dd-item" data-id="2">
-                                    <div class="dd-handle">Item 2</div>
-                                    <ol class="dd-list">
-                                        <li class="dd-item" data-id="3">
-                                            <div class="dd-handle">Item 3</div>
-                                        </li>
-                                        <li class="dd-item" data-id="4">
-                                            <div class="dd-handle">Item 4</div>
-                                        </li>
-                                        <li class="dd-item" data-id="5">
-                                            <div class="dd-handle">Item 5</div>
-                                            <ol class="dd-list">
-                                                <li class="dd-item" data-id="6">
-                                                    <div class="dd-handle">Item 6</div>
-                                                </li>
-                                                <li class="dd-item" data-id="7">
-                                                    <div class="dd-handle">Item 7</div>
-                                                </li>
-                                                <li class="dd-item" data-id="8">
-                                                    <div class="dd-handle">Item 8</div>
-                                                </li>
-                                            </ol>
-                                        </li>
-                                        <li class="dd-item" data-id="9">
-                                            <div class="dd-handle">Item 9</div>
-                                        </li>
-                                        <li class="dd-item" data-id="10">
-                                            <div class="dd-handle">Item 10</div>
-                                        </li>
-                                    </ol>
-                                </li>
-                                <li class="dd-item" data-id="11">
-                                    <div class="dd-handle">Item 11</div>
-                                </li>
-                                <li class="dd-item" data-id="12">
-                                    <div class="dd-handle">Item 12</div>
-                                </li>
-                            </ol>
+                    <div class="clearfix m-b-20" >
+                        <div class="dd" id="sortbody">
+                          
                         </div>
                     </div>
                     <b>Output JSON</b>
@@ -176,19 +135,21 @@
 <script>
   var urlval='{{route("cpanel.category.updatesort",[0]) }}';
   $(function () {
+    $('#sortbody').html('');
    //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
     $('#parent_id').on('change', function() {
 
    var  parentid = $('#parent_id').find('option:selected').val();
+if(parentid==0){
+  $('#sortbody').html('Not selected');
+}else{
 
- 
-    //alert(parentid);
 // urlval ='{{route("cpanel.category.updatesort",["itemid"=>'+parentid+']) }}';
 urlval ='{{url("cpanel/category/updatesort/parentid")}}';
 urlval=urlval.replace("parentid", parentid);
 var urlget='{{url("cpanel/category/getsortbyid/parentid")}}';
 urlget=urlget.replace("parentid", parentid);
- alert(urlget);
+ //alert(urlget);
  
         $.ajax({
           //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
@@ -199,10 +160,12 @@ urlget=urlget.replace("parentid", parentid);
             success: function(data){
               $('#errormsg').html('');
               $('#sortbody').html('');
-             
-              $.each(data, function(i, item) {
-                $('#errormsg').append(item.id+':'+item.title+',parent:'+item.parent_id+'-');
-          });
+               if(data.length==0){
+                $('#sortbody').html('No Data');
+               }else{
+                fillsortlist(data, $('#sortbody'));
+               }
+        
              // $('.alert').html(result.success);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -212,15 +175,58 @@ urlget=urlget.replace("parentid", parentid);
             }
         
         });
+}
+
  
     });
  
-    function(data) {
+    function fillsortlist(data,$root) {
+      /*
       $.each(data, function(i, item) {
                 $('#sortbody').append(item.id+':'+item.title+',parent:'+item.parent_id+'-');
               });
+              */
+              var $ul = $('<ol class="dd-list">');
+
+$.each(data, function(_,item) {
+  var $li = $('<li class="dd-item" data-id="'+item.id+'">');
+    var $btncollapse = $('<button data-action="collapse" type="button" style="display: block;">').text('Collapse');
+      var $btnexpand = $('<button data-action="expand" type="button" style="display: none;">').text('Expand');
+        if (item.children && item.children.length) {
+          $li.append($btncollapse);
+          $li.append($btnexpand);
+        }
+    var $divhandle = $('<div class="dd-handle">').text(item.title);
+      $li.append($divhandle);
+  if (item.children && item.children.length) {
+    $li.append(fillsortlist(item.children));
+  }
+
+  $ul.append($li);
+});
+
+return $root ? $root.html($ul) : $ul;
     }
 
+
+    /*
+ function fillsortlist(data,$root) {
+  
+              var $ul = $('<ul>');
+
+$.each(data, function(_,   item) {
+  var $li = $('<li>').text(item.title);
+
+  if (item.children && item.children.length) {
+    $li.append(fillsortlist(item.children));
+  }
+
+  $ul.append($li);
+});
+
+return $root ? $root.html($ul) : $ul;
+    }
+    */
 });
 </script>
 <script src="{{url('admin/js/admin.js')}}"></script>
