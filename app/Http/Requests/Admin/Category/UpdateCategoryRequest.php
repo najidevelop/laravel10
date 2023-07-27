@@ -19,7 +19,8 @@ class UpdateCategoryRequest extends FormRequest
   
        return[
         // 'title'=>'required|alpha_num:ascii|unique:categories,title',        
-         'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u',  
+      //   'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u',  
+         'title'=>'required',  
        ];   
     
     }
@@ -35,7 +36,7 @@ public function messages(): array
    $maxMobileLength=15;
    return[
      'title.required'=>'The title is required',
-     'title.alpha_num'=>'The title format must be alphabet',
+    // 'title.alpha_num'=>'The title format must be alphabet',
       
    
     ];

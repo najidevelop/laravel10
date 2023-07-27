@@ -1,5 +1,10 @@
 $(function () {
-    
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
 /*
     $('.dd').on('change', function () {
         var $this = $(this);
@@ -9,7 +14,7 @@ $(function () {
     });
     */
     $('#btn_savecatsort').on('click', function () {
-        //alert("Hii");
+  
       
 
     });
@@ -18,7 +23,7 @@ $(function () {
        var  parentid = $('#parent_id').find('option:selected').val();
         e.preventDefault();
         var serializedData = window.JSON.stringify($('.dd').nestable('serialize'));
-        alert(serializedData);
+     //   alert(serializedData);
         $.ajaxSetup({
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -28,14 +33,15 @@ $(function () {
         
         $.ajax({
           //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
-          url: urlval,              
+          url: urlval,//from sort page              
           type: "POST",
           data: serializedData,
           contentType: 'application/json',
             success: function(result){
              // $('.alert').show();
            //   alert(result.message);
-           alert(result);
+           toastr.success(result); 
+          // alert(result);
              // $('.alert').html(result.success);
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -94,7 +94,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="{{ url('/cpanel/category/sort') }}" class="nav-link">
-                      <i class="far fa fa-plus-square nav-icon"></i>
+                      <i class="far fa fa-sort nav-icon"></i>
                       <p>Sorting</p>
                     </a>
                   </li>                   

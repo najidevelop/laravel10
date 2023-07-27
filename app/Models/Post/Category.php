@@ -14,5 +14,8 @@ class Category extends Model
         'desc',
         'parent_id',
         'sequence', 
+        'status',
+        'createuserid',
+        'updateuserid',       
     ];
 }
