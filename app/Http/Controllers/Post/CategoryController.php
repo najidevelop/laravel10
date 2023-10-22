@@ -369,4 +369,14 @@ class CategoryController extends Controller
         $categoriesAll = collect($List);
         $this->getCategorysons($categoriesAll, $itemid);
     }
+    public function selectList()
+    {
+        $List = DB::table("categories")
+            ->select("id", "title", "desc", "parent_id")
+            ->get();
+
+        $parents = $this->categorytree($List);
+        // return view('admin.user.adduser');
+        return  $parents;
+    }
 }

@@ -64,15 +64,15 @@ Route::prefix('/category')->group(function () {
 
     //Post cpanel/post
     Route::prefix('/post')->group(function () {
-        Route::get('/view', [CategoryController::class, 'index'])->name('cpanel.post.view');
-        Route::get('/add', [CategoryController::class, 'create']);
-        Route::post('/store', [CategoryController::class, 'store']);
-        Route::get('/edit/{itemid}', [CategoryController::class, 'edit']);
-        Route::post('/update/{itemid}', [CategoryController::class, 'update']);
-        Route::get('/delete/{itemid}', [CategoryController::class, 'destroy']);
-        Route::get('/sort', [CategoryController::class, 'sort']);
-        Route::post('/updatesort/{itemid}', [CategoryController::class, 'updatesort'])->name('cpanel.post.updatesort');;
-        Route::get('/getsortbyid/{itemid}', [CategoryController::class, 'getsortbyid']) ;
+        Route::get('/view', [PostController::class, 'index'])->name('cpanel.post.view');
+        Route::get('/add', [PostController::class, 'create']);
+        Route::post('/store', [PostController::class, 'store']);
+        Route::get('/edit/{itemid}', [PostController::class, 'edit']);
+        Route::post('/update/{itemid}', [PostController::class, 'update']);
+        Route::get('/delete/{itemid}', [PostController::class, 'destroy']);
+        Route::get('/sort', [PostController::class, 'sort']);
+        Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');;
+        Route::get('/getsortbyid/{itemid}', [PostController::class, 'getsortbyid']) ;
     });
 });
 

@@ -82,6 +82,7 @@ if(is_null($userdb)){
         $user->mobile = $formdata['mobile'];
         $user->phone = $formdata['phone'];
         $user->role = $formdata['role'];
+        $user->status =0;
        // $user->photo ="image.jpg";   
         $user->save();
         //save photo

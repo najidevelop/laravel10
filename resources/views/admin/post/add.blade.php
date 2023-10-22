@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Categories</h1>
+            <h1>Posts</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/cpanel') }}">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item active">Posts</li>
               <li class="breadcrumb-item active">Add</li>
             </ol>
           </div>
@@ -27,7 +27,7 @@
        <!-- Horizontal Form -->
       <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Add Category</h3>
+                <h3 class="card-title">Add Post</h3>
               </div>
               @if ($errors->any())
               <div class="alert alert-danger">
@@ -40,7 +40,7 @@
               </div>
               @endif
               <!-- form start -->
-              <form class="form-horizontal" action="{{url('/cpanel/category/store')}}" enctype="multipart/form-data" method="POST" name="store_category_form" id="store_category_form">
+              <form class="form-horizontal" action="{{url('/cpanel/post/store')}}" enctype="multipart/form-data" method="POST" name="store_category_form" id="store_category_form">
                 @csrf
                 <div class="card-body">
                    <!-- title start -->
@@ -112,13 +112,13 @@
                         <!-- desc start -->
               
                         <div class="form-group row">
-                    <label for="desc" class="col-sm-2 col-form-label">Descreption</label>
+                    <label for="content" class="col-sm-2 col-form-label">Content</label>
                     <div class="col-sm-10">
-                      <textarea class="textarea" name="desc"  id="desc" placeholder="Place some text here"
-                      style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{{old('desc')}}</textarea>
+                      <textarea class="textarea" name="content"  id="content" placeholder="Place some text here"
+                      style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{{old('content')}}</textarea>
                     
-                      @error('desc')  
-                      <span id="desc-error" class="error invalid-feedback">{{ $message }}</span>
+                      @error('content')  
+                      <span id="content-error" class="error invalid-feedback">{{ $message }}</span>
                       @enderror  
                     </div>
                   </div>
@@ -134,7 +134,7 @@
                           <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
-                  <a class="btn btn-default float-right" href="{{url('cpanel/category/view')}}">Cancel</a>
+                  <a class="btn btn-default float-right" href="{{url('cpanel/post/view')}}">Cancel</a>
             
               </div>
                 <!-- /.card-footer -->

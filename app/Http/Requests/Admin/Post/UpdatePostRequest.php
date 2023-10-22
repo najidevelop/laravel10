@@ -11,7 +11,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,26 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return[
+             'title'=>'required',   
+          //  'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
+            'slug'=>'unique:posts,slug',   
+              //     'title'=>'required|alpha_num|unique:categories,title',      
+          
+            ]; 
     }
+    public function messages(): array
+{
+   $maxlength=500;
+   $minMobileLength=10;
+   $maxMobileLength=15;
+   return[
+     'title.required'=>'The Title is required',
+    // 'title.alpha_num'=>'The title format must be alphabet',
+     'title.regex'=>'The Title format must be alphabet',
+    // 'title.unique'=>'The Title is already exist',
+     'slug.unique'=>'The Slug is already exist',
+    ];
+    
+}
 }

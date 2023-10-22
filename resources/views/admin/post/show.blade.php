@@ -7,13 +7,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Categories</h1>
+            <h1>Posts</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/cpanel') }}">Home</a></li>
               <li class="breadcrumb-item active">Post</li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item active">Posts</li>
             </ol>
           </div>
         </div>
@@ -26,10 +26,10 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Show Categories</h3>
+          <h3 class="card-title">Show Posts</h3>
 
           <div class="card-tools">
-          <a class="btn btn-info btn-sm" href="{{ url('/cpanel/category/add') }}">
+          <a class="btn btn-info btn-sm" href="{{ url('/cpanel/post/add') }}">
                               <i class="fas fa-plus">
                               </i>
                              New
@@ -45,23 +45,23 @@
                 <thead>
                 <tr>
                   <th>Title</th>
-                  <th>Desc</th>
+                  <th>Slug</th>
                   <th>Status</th>
                   <th></th>                   
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($categories as $category)
+                @foreach ($posts as $post)
                 <tr>
-                  <td>{{ $category->title }}</td>
-                  <td>{{ $category->desc }}</td>
-                  <td>@if($category->status==1)Published @else Draft @endif</td>
-                  <td>    <a class="btn btn-info btn-sm" href="{{url('/cpanel/category/edit',[$category->id]) }}">
+                  <td>{{ $post->title }}</td>
+                  <td>{{ $post->slug }}</td>
+                  <td>@if($post->status==1)Published @else Draft @endif</td>
+                  <td>    <a class="btn btn-info btn-sm" href="{{url('/cpanel/post/edit',[$post->id]) }}">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Edit
                           </a>
-                          <a class="btn btn-danger btn-sm"  href="{{url('/cpanel/category/delete',[$category->id]) }}">
+                          <a class="btn btn-danger btn-sm"  href="{{url('/cpanel/post/delete',[$post->id]) }}">
                               <i class="fas fa-trash">
                               </i>
                               Delete
