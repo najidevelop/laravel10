@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Categories</h1>
+            <h1>Posts</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/cpanel') }}">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item active">Posts</li>
               <li class="breadcrumb-item active">Add</li>
             </ol>
           </div>
@@ -27,14 +27,14 @@
        <!-- Horizontal Form -->
       <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Add Category</h3>
+                <h3 class="card-title">Sort Posts</h3>
               </div>
             
               <!-- sort-->
               <div class="card">
                 <div class="header body">
                     <h2>
-                        Category Sort
+                        Post Sort
                         <small>Drag & drop hierarchical list with mouse and touch compatibility</small>
                     </h2>
                     <div class="form-group row" id="errormsg">
@@ -46,12 +46,20 @@
                             <div class="col-sm-10">
                             <select class="form-control"  name="parent_id" id="parent_id"  
                              >
-                            <option value="0" @if(old('parent_id')==0) selected="selected" @endif >Choose Category</option>
-                            @if(!empty($categories))
-                            @foreach($categories as $category)
-                              <option value="{{$category->id}}" >{{ $category->title }}</option>
-                              @endforeach
-                              @endif
+                             <option value="0" @if(old('parent_id')==0) selected="selected" @endif >-</option>
+                             @if(!empty($categories))
+                             @foreach($categories as $category)
+                               <option value="{{$category->last()->id}}"  >
+                          
+                                 @foreach($category as $parent)                        
+                                 {{ $parent->title }}
+                                 @if ($category->last()->id!=$parent->id)
+                                 >
+                                 @endif
+                                 @endforeach                     
+                               </option>
+                               @endforeach
+                               @endif
                             </select>                           
                           </div>                           
                         </div>
@@ -75,8 +83,8 @@
                 -->
                   </div>
                 <div class="card-footer">
-                  <button type="button" name="btn_savecatsort" id="btn_savecatsort" class="btn btn-info">Save</button>
-                  <a class="btn btn-default float-right" href="{{url('cpanel/category/view')}}">Cancel</a>
+                  <button type="button" name="btn_savepostsort" id="btn_savepostsort" class="btn btn-info">Save</button>
+                  <a class="btn btn-default float-right" href="{{url('cpanel/post/view')}}">Cancel</a>
             
               </div>
             </div>
@@ -124,10 +132,10 @@
   });
 </script>
 <!-- Jquery Nestable -->
-<script src="{{url('admin/plugins/nestable/jquery.nestable.js')}}"></script>
+<script src="{{url('admin/plugins/nestable/jquery.nestable1.js')}}"></script>
 <script src="{{url('admin/js/pages/ui/sortable-nestable.js')}}"></script>
 <script>
-  var urlval='{{route("cpanel.category.updatesort",[0]) }}';
+  var urlval='{{route("cpanel.post.updatesort",[0]) }}';
   $(function () {
     $('#sortbody').html('');
    //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
@@ -139,9 +147,9 @@ if(parentid==0){
 }else{
 
 // urlval ='{{route("cpanel.category.updatesort",["itemid"=>'+parentid+']) }}';
-urlval ='{{url("cpanel/category/updatesort/parentid")}}';
+urlval ='{{url("cpanel/post/updatesort/parentid")}}';
 urlval=urlval.replace("parentid", parentid);
-var urlget='{{url("cpanel/category/getsortbyid/parentid")}}';
+var urlget='{{url("cpanel/post/getsortbyid/parentid")}}';
 urlget=urlget.replace("parentid", parentid);
  //alert(urlget);
  

@@ -24,7 +24,7 @@ class UpdatePostRequest extends FormRequest
         return[
              'title'=>'required',   
           //  'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
-            'slug'=>'unique:posts,slug',   
+          //  'slug'=>'unique:posts,slug',   
               //     'title'=>'required|alpha_num|unique:categories,title',      
           
             ]; 

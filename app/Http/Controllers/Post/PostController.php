@@ -22,17 +22,21 @@ class PostController extends Controller
     {
         //
 
-        $List = DB::table("posts")->get();
-
+        //$List = Post::table("posts")->with('user')->get();
+        $List = Post::with('category')->get();
+        /*
+foreach($List as $row){
+$t=$row->category->title;
+}
+*/
         return view("admin.post.show", ["posts" => $List]);
     }
     public function sort()
     {
         //
-        $List = DB::table("posts")
-            ->where("parent_id", 0)
-            ->get();
-        return view("admin.category.sort", ["posts" => $List]);
+        $catCont=new CategoryController();
+        $parents =  $catCont->selectList();
+        return view("admin.post.sort", ["categories" => $parents ]);
     }
 
     public function updatesort(Request $request, $itemid)
@@ -58,15 +62,16 @@ class PostController extends Controller
     public function getsortbyid($itemid)
     {
         $List = DB::table("posts")->where("status",1)
-            ->select("id", "title", "parent_id", "sequence")
-            ->orderBy("parent_id", "asc")
+        ->where("category_id",$itemid)
+            ->select("id", "title", "category_id", "sequence")
+            ->orderBy("category_id", "asc")
             ->orderBy("sequence", "asc")
             ->get();
         $posts = collect($List);
-        $categoryTree = $this->buildCategoryTree($List, $itemid);
+     //   $categoryTree = $this->buildCategoryTree($List, $itemid);
         //$list= $List=DB::table('posts')->where('parent_id',$itemid)->select('id','title','parent_id')->get();
         // return  $itemid;
-        return response()->json($categoryTree);
+        return response()->json($posts);
     }
     /**
      * Show the form for creating a new resource.
@@ -190,24 +195,19 @@ $catCont=new CategoryController();
             } else {
                 $tmpslug = $formdata["slug"];
             }
-            $this->getsonsid($itemid);
-            $status = isset($formdata["status"]) ? 1 : 0;
-            Category::whereIn("id", $this->sonscollection)->update([
-                "status" => $status,
-            ]);
-
-            Category::find($itemid)->update([
+          
+            Post::find($itemid)->update([
                 "title" => $formdata["title"],
                 "slug" => Str::slug($tmpslug),
-                "desc" => $formdata["desc"],
-                "parent_id" => $formdata["parent_id"],
+                "content" => $formdata["content"],
+                "category_id" => $formdata["parent_id"],
                 //'sequence' => $formdata['sequence'],
                 "status" => isset($formdata["status"]) ? 1 : 0,
                 "updateuserid" => Session::get("loguser")->id,
             ]);
             return redirect()
                 ->back()
-                ->with("success_message", "Category has been Updated!");
+                ->with("success_message", "Post has been Updated!");
         }
     }
     /**
@@ -218,11 +218,11 @@ $catCont=new CategoryController();
         $item = Post::find($itemid);
         //delete photo
         if (!($item === null)) {
-            //$sons=$this->getsons($item->id);
-            $this->updateParentofSons($item->id, $item->parent_id);
-            Category::find($itemid)->delete();
+         
+           
+            Post::find($itemid)->delete();
         }
-        return redirect()->route("cpanel.category.view");
+        return redirect()->route("cpanel.post.view");
         // return  $this->index();
         //   return redirect()->route('users.index');
     }
@@ -235,73 +235,11 @@ $catCont=new CategoryController();
 
     protected $parentcollection;
     protected $sonscollection;
-    public function categorytree($List)
-    {
-        $firstrow = $List->first();
+   
 
-        $totalCollection = collect();
-
-        foreach ($List as $category) {
-            $this->parentcollection = new Collection();
-            //add current category as first element
-            $this->parentcollection->push($category);
-            $this->getparents($category->parent_id, $List);
-
-            $totalCollection->push(
-                $this->parentcollection->reverse()->values()
-            );
-        }
-        return $totalCollection;
-    }
-
-    public function getparents($categoryId, $List)
-    {
-        if ($categoryId != 0 && $categoryId != null) {
-            $parentrow = $List->where("id", $categoryId)->first();
-            $this->parentcollection->push($parentrow);
-            $this->getparents($parentrow->parent_id, $List);
-            //  return $this->getparents($parentrow->parent_id,$List, $newcollection);
-            //  return  $newcollection;
-        }
-    }
-    public function getsons($categoryId)
-    {
-        if ($categoryId != null) {
-            $sons = DB::table("posts")
-                ->select("id", "title", "parent_id")
-                ->where("parent_id", $categoryId)
-                ->get();
-            return $sons;
-        } else {
-            return null;
-        }
-    }
-    public function getsonstree($parentList)
-    {
-        $soncollection = new Collection();
-        if ($parentList != null) {
-            $this->parentcollection = new Collection();
-            $this->parentcollection = collect($parentList);
-
-            foreach ($parentList as $parent) {
-                $soncollection = $this->getsons($parent->id);
-                //update item in collection
-                $this->parentcollection
-                    ->where("id", $parent->id)
-                    ->transform(function ($item) use ($soncollection) {
-                        //   $item['children']->push($soncollection);
-                        //$item->title="xx";
-                        $item->children = $soncollection;
-                        return $item;
-                    });
-            }
-
-            return $this->parentcollection;
-        } else {
-            return null;
-        }
-    }
-
+ 
+  
+  
     public function updateParentofSons($categoryId, $newParentId)
     {
         if ($categoryId != null) {
@@ -349,12 +287,14 @@ $catCont=new CategoryController();
     }
     public function updatetreesequence($item, int $i, $parentid)
     {
+
         foreach ($item as $itemrow) {
-            Category::find($itemrow["id"])->update([
+            Post::find($itemrow["id"])->update([
                 "parent_id" => $parentid,
                 "sequence" => $i,
             ]);
             $i++;
+            /*
             if (
                 isset($itemrow["children"]) &&
                 count($itemrow["children"]) > 0
@@ -365,6 +305,7 @@ $catCont=new CategoryController();
                     $itemrow["id"]
                 );
             }
+            */
         }
     }
     public function getsonsid($itemid)

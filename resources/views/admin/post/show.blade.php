@@ -46,15 +46,18 @@
                 <tr>
                   <th>Title</th>
                   <th>Slug</th>
+                  <th>Category</th>
                   <th>Status</th>
                   <th></th>                   
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($posts as $post)
+            
                 <tr>
                   <td>{{ $post->title }}</td>
                   <td>{{ $post->slug }}</td>
+                  <td>{{ $post->category->title }}</td>
                   <td>@if($post->status==1)Published @else Draft @endif</td>
                   <td>    <a class="btn btn-info btn-sm" href="{{url('/cpanel/post/edit',[$post->id]) }}">
                               <i class="fas fa-pencil-alt">

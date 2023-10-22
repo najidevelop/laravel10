@@ -95,12 +95,15 @@
                          @error('parent_id')  
                          describedby="parent_id-error" aria-invalid="true"  
                          @enderror  >
-                         <option value="0" @if(old('parent_id')==0) selected="selected" @elseif($category->parent_id=="0" && !$errors->any() )selected="selected"@endif >-</option>
+                         <option value="0" @if(old('parent_id')==0) selected="selected" @elseif($post->category_id=="0" && !$errors->any() )selected="selected"@endif >-</option>
                          @if(!empty($categories))
                          @foreach($categories as $categoryRow)
 @if($categoryRow->last()->id==$post->category_id)
                            <option value="{{$categoryRow->last()->id}}" @if(old('parent_id')==$categoryRow->last()->id) selected="selected"  @elseif ($post->category_id==$categoryRow->last()->id && !$errors->any()) selected="selected" @endif >
-                      
+                            @elseif ($categoryRow->last()->id!=$post->category_id)
+                            <option value="{{$categoryRow->last()->id}}" @if(old('parent_id')==$categoryRow->last()->id) selected="selected"  @endif >
+                
+                            @endif
                              @foreach($categoryRow as $parent)                        
                              {{ $parent->title }}
                              @if ($categoryRow->last()->id!=$parent->id)
@@ -109,7 +112,8 @@
                             
                              @endforeach                     
                            </option>
-                           @endif
+
+                         
                            @endforeach
                            @endif
                          </select>
