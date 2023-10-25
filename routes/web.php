@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Post\CategoryController;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Media\MediaImageController;
 use App\Http\Middleware\Role\AdminRole;
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,17 @@ Route::prefix('/category')->group(function () {
         Route::get('/sort', [PostController::class, 'sort']);
         Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');;
         Route::get('/getsortbyid/{itemid}', [PostController::class, 'getsortbyid']) ;
+    });
+       //Media cpanel/media
+       Route::prefix('/media')->group(function () {
+        Route::get('/view', [MediaImageController::class, 'index'])->name('cpanel.media.view');
+        Route::get('/add', [MediaImageController::class, 'create']);
+        Route::post('/store', [MediaImageController::class, 'store']);
+        Route::get('/edit/{itemid}', [MediaImageController::class, 'edit']);
+        Route::post('/update/{itemid}', [MediaImageController::class, 'update']);
+        Route::get('/delete/{itemid}', [MediaImageController::class, 'destroy']);
+    
+       
     });
 });
 
