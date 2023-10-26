@@ -50,11 +50,15 @@
               </div>
               <div class="card-body">
                 <div class="row">
+                 
+                  @foreach ($images as $imagerow)
                   <div class="col-sm-2">
                     <a href="https://via.placeholder.com/1200/FFFFFF.png?text=1" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
-                      <img src="https://via.placeholder.com/300/FFFFFF?text=1" class="img-fluid mb-2" alt="white sample"/>
+                      <img  src="{{url($imagerow->url)}}" class="img-fluid mb-2" onerror="this.src='{{url('defaultpic/defaultpic.jpg')}}'" alt="white sample"/>
                     </a>
-                  </div>
+                  </div> 
+                  @endforeach
+                
                   <div class="col-sm-2">
                     <a href="https://via.placeholder.com/1200/000000.png?text=2" data-toggle="lightbox" data-title="sample 2 - black" data-gallery="gallery">
                       <img src="https://via.placeholder.com/300/000000?text=2" class="img-fluid mb-2" alt="black sample"/>

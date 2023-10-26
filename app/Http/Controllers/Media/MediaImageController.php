@@ -13,14 +13,30 @@ use Image;
 use App\Http\Requests\Admin\Media\StoreMediaImageRequest;
 use App\Http\Requests\Admin\Media\UpdateMediaImageRequest;
 use App\Models\Media\MediaImage;
-
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 class MediaImageController extends Controller
 {
+  public int $maxFiles=100;
      /**
      * Display a listing of the resource.
      */
     public function index()
     {
+      //test
+       /*
+      $now = Carbon::now();
+      $now=  $now->format('d-m-Y');
+      $path='media';
+   
+      $directories = Storage::allDirectories( $path);
+    $c=  count($directories);
+ 
+    $c= $this->foldersCount($path);
+return dd(  File::directories($path)) ;
+    ///  $now->format('H:i:s');
+         */
+      //end test
         $List = DB::table("media_images")->get();
  
         return view("admin.media.show", ["images" => $List]);
@@ -73,27 +89,50 @@ if(is_null($userdb)){
         $imagemodel->title = $formdata['title'];
         $imagemodel->caption = $formdata['caption'];
         $imagemodel->desc = $formdata['desc'];
-     
+     $path='media';
        // $user->photo ="image.jpg";   
-     
+    
         //save photo
         if($request->hasFile('photo')){
             $imagemodel->save();
             $image_tmp=$request->file('photo');
             if($image_tmp->isValid()){
+               $dc= $this->foldersCount($path);
+               $folderpath="";
+               if($dc==0){
+                $dirname='\\'."1";
+              $folderpath=$path.$dirname;
+ File::makeDirectory($folderpath, 0777, true, true); 
+               }
+               else
+               {
+                //check files count in  last folder
+$folderpath=$path.'\\'.$dc;
+$fc=$this->filesCount($folderpath);
+if($fc>=$this->maxFiles){
+  //create new folder
+  $newFolder=$dc+1;
+  $folderpath=$path.'\\'.$newFolder;
+  File::makeDirectory($folderpath, 0777, true, true); 
+
+} 
+               }
+
               //Get image Extension
               $extension=$image_tmp->getClientOriginalExtension();
               //Generate new Image Name
               //Hash::make($request->password),
+              $now = Carbon::now();
               $imageName=rand(10000,99999).$imagemodel->id.'.'.$extension;
-              $path='media';
-              if(!File::isDirectory($path)){
-                  File::makeDirectory($path, 0777, true, true); 
+              
+              if(!File::isDirectory($folderpath)){
+                  File::makeDirectory( $folderpath, 0777, true, true); 
               }  
-             $imagePath=$path.'\\'.$imageName;   
+             $imagePath= $folderpath.'\\'.$imageName;   
               //Upload the Image
               Image::make($image_tmp)->save($imagePath);
               $imagemodel->name = $imageName;
+              $imagemodel->url=$imagePath;
               $imagemodel->save();
             }
           }
@@ -147,4 +186,27 @@ if(is_null($userdb)){
     {
         //
     }
+    public function filesCount(string $path)
+    {
+$files = File::files($path);
+
+$countFiles = 0;  
+if ($files !== false) {
+    $countFiles = count($files);
+}   
+return $countFiles;
+  
+    }
+    public function foldersCount(string $path)
+    {
+$files = File::directories($path);
+
+$countFiles = 0;  
+if ($files !== false) {
+    $countFiles = count($files);
+}   
+return $countFiles;
+  
+    }
+    
 }
