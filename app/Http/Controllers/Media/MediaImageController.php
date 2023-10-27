@@ -15,6 +15,8 @@ use App\Http\Requests\Admin\Media\UpdateMediaImageRequest;
 use App\Models\Media\MediaImage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Stringable;
+
 class MediaImageController extends Controller
 {
   public int $maxFiles=100;
@@ -90,6 +92,7 @@ if(is_null($userdb)){
         $imagemodel->caption = $formdata['caption'];
         $imagemodel->desc = $formdata['desc'];
      $path='media';
+     $separator='/';
        // $user->photo ="image.jpg";   
     
         //save photo
@@ -100,19 +103,20 @@ if(is_null($userdb)){
                $dc= $this->foldersCount($path);
                $folderpath="";
                if($dc==0){
-                $dirname='\\'."1";
+                $dirname=  $separator."1";
               $folderpath=$path.$dirname;
  File::makeDirectory($folderpath, 0777, true, true); 
                }
                else
                {
                 //check files count in  last folder
-$folderpath=$path.'\\'.$dc;
+$folderpath=$path.$separator.$dc;
+// $folderpath=$path.'\\'.$dc;
 $fc=$this->filesCount($folderpath);
 if($fc>=$this->maxFiles){
   //create new folder
   $newFolder=$dc+1;
-  $folderpath=$path.'\\'.$newFolder;
+  $folderpath=$path.$separator.$newFolder;
   File::makeDirectory($folderpath, 0777, true, true); 
 
 } 
@@ -128,11 +132,12 @@ if($fc>=$this->maxFiles){
               if(!File::isDirectory($folderpath)){
                   File::makeDirectory( $folderpath, 0777, true, true); 
               }  
-             $imagePath= $folderpath.'\\'.$imageName;   
+             $imagePath= $folderpath.$separator.$imageName;   
               //Upload the Image
               Image::make($image_tmp)->save($imagePath);
               $imagemodel->name = $imageName;
               $imagemodel->url=$imagePath;
+              $imagemodel->extention=  $extension;
               $imagemodel->save();
             }
           }
@@ -168,15 +173,91 @@ if($fc>=$this->maxFiles){
      */
     public function edit(string $id)
     {
-        //
+      $imagemodel= DB::table('media_images')->find($id);
+      $imagemodel->url=url($imagemodel->url);
+      return response()->json($imagemodel);
+      //
+ 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateMediaImageRequest $request,$id)
     {
-        //
+       //try{
+  //  try{
+   // $x=5/0;
+    // validate
+   $formdata=$request->all();  
+   $validator = Validator::make($formdata,
+   $request->rules(),
+   $request->messages()
+);
+
+if ($validator->fails()) {
+  /*
+    return redirect('/cpanel/users/add')
+    ->withErrors($validator)
+                ->withInput();
+                */
+                return  redirect()->back()->withErrors($validator)
+                ->withInput();
+               
+}else{
+      //  $this->validate($request,$rules,$customMessages);
+
+        //email not repeated
+        /*
+        $userdb = DB::table('users')->where('email', $formdata['email'])
+        ->orWhere('name', $formdata['name'])->first();
+if(is_null($userdb)){
+  */
+  $imagemodel =DB::table('media_images')->find($id);
+        
+      //  $imagemodel->name = $formdata['name'];
+        $imagemodel->title = $formdata['title'];
+        $imagemodel->caption = $formdata['caption'];
+        $imagemodel->desc = $formdata['desc'];
+   
+     
+        //save photo
+        if($request->hasFile('photo')){           
+            $image_tmp=$request->file('photo');
+            if($image_tmp->isValid())
+            {           
+             
+                $imagePath= $imagemodel->url;
+                $after = Str::afterLast($imagePath, '.');
+                
+ 
+                if(File::exists($imagePath)){
+                  File::delete($imagePath);
+                }
+ 
+              //Get image Extension
+              $extension=$image_tmp->getClientOriginalExtension();
+              $newPath = Str::replaceLast($imagemodel->extention, $extension, $imagePath);
+              $newname = Str::replaceLast($imagemodel->extention, $extension, $imagemodel->name);
+              $imagemodel->extention=  $extension;
+
+              //Generate new Image Name
+              //Hash::make($request->password),
+           
+         
+              //Upload the Image
+              Image::make($image_tmp)->save($newPath);
+
+              $imagemodel->name = $newname ;
+              $imagemodel->url= $newPath;
+              
+            }
+            
+          }
+          $imagemodel->save();
+       //  $user->id;
+         return redirect()->back()->with('success_message','user has been Added!');
+    } 
     }
 
     /**
