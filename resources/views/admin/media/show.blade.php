@@ -58,15 +58,7 @@
                   </a>
                   </div> 
                   @endforeach
-                
-                  <div class="col-sm-2">
-                    <a href="https://via.placeholder.com/1200/000000.png?text=2" data-toggle="lightbox" data-title="sample 2 - black" data-gallery="gallery">
-                      <img src="https://via.placeholder.com/300/000000?text=2" class="img-fluid mb-2" alt="black sample"/>
-                    </a>
-                  </div>
-                
-                 
-                 
+    
                 </div>
               </div>
             </div>
@@ -136,8 +128,8 @@
                     <div class="col-sm-8">
 
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="photo" id="photo">
-                      <label class="custom-file-label" for="photo">Choose file</label>
+                      <input type="file" class="custom-file-input " name="photo" id="btn_photo_add">
+                      <label class="custom-file-label " id="fileupload_label_add" >Choose file</label>
                     </div>
                    </div>
 
@@ -151,13 +143,13 @@
  
                 </div>
                 <div class="col-sm-4">
-                  <a href="https://via.placeholder.com/1200/FFFFFF.png?text=1" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
-                    <img src="https://via.placeholder.com/300/000000?text=2" class="img-fluid mb-2" alt="black sample">
+                  <a  data-toggle="lightbox" data-title="" >
+                    <img src="{{url('defaultpic/defaultpic.jpg')}}" id="image_add" class="img-fluid mb-2" alt="new image">
                   </a>
                 </div>
                
               </div>
-            
+          
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -239,8 +231,8 @@
                     <div class="col-sm-8">
 
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="photo" id="photo_edit">
-                      <label class="custom-file-label" for="photo">Choose file</label>
+                      <input type="file" class="custom-file-input " name="photo" id="photo_edit">
+                      <label class="custom-file-label " id="fileupload_label" for="photo">Choose file</label>
                     </div>
                    </div>
 
@@ -255,7 +247,7 @@
                 </div>
                 <div class="col-sm-4">
                   <a  data-toggle="lightbox" data-title="" >
-                    <img src="" id="image_edit" class="img-fluid mb-2" alt="black sample">
+                    <img src="{{url('defaultpic/defaultpic.jpg')}}" id="image_edit" class="img-fluid mb-2" alt="black sample">
                   </a>
                 </div>
                
@@ -264,7 +256,9 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-danger" id="btn_delete_image">Delete</button>
+               
+              <button type="button" id="btn_update_image" class="btn btn-primary">Save changes</button>
             </div>
            
           </form>
@@ -312,22 +306,27 @@
 <script src="{{url('admin/plugins/ekko-lightbox/ekko-lightbox.min.js')}}"></script>
 
 <script>
-  var urlval='{{route("cpanel.category.updatesort",[0]) }}';
+  var id="0";
   $(function () {
-    
-   //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
-    $('.edit_image').on('click', function(e) {//edit_image
-      $('#title_edit').attr('value', '');
+
+  function clearform (){
+   var imgpath= '{{url("defaultpic/defaultpic.jpg")}}';
+   $('#title_edit').attr('value', '');
                 $('#caption_edit').attr('value', '');
                 $('#desc_edit').text('');
                 $('#url_edit').text('');
-                $('#image_edit').attr('src', '');
-var id= $(this).attr('id');
+                $('#image_edit').attr('src', imgpath);
+   }
+
+   //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
+ $('.edit_image').on('click', function(e) {//edit_image
+   clearform();
+id= $(this).attr('id');
  
  
 var urlget='{{url("cpanel/media/edit/itemid")}}';
 urlget=urlget.replace("itemid",id);
- //alert(urlget);
+//  alert(urlget);
   
         $.ajax({
           //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
@@ -357,17 +356,148 @@ urlget=urlget.replace("itemid",id);
             }
         
         });
-       
- 
-
- 
+   
     });
  
-     
+
+
+
+  
+   //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
+    $('#btn_update_image').on('click', function(e) {//edit_image
+     // alert("hi");
+  // clearform();
+//var formdata= $('#update_media_form').serialize();
+let request=new FormData($('#update_media_form')[0]);
+//  var urlget='cpanel/media/update/itemid';
+
+ var urlget='{{url("cpanel/media/update/itemid")}}';
+urlget=urlget.replace("itemid",id);
+ //alert(urlget);
 
 
  
+//alert( formdata);
+        $.ajax({
+          //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
+          url: urlget,              
+          type: "POST",  
+          data: request,  
+       contentType:false,  
+       processData:false,   
+          //contentType: 'application/json',
+            success: function(data){
+              $('#errormsg').html('');
+          
+               if(data.length==0){
+                $('#errormsg').html('No Data');
+               }else{
+              //  alert(data);
+                toastr.success(data);  
+                window.location.href = '{{url("cpanel/media/view")}}';
+               /*
+                $('#title_edit').attr('value', data.title);
+                $('#caption_edit').attr('value', data.caption);
+                $('#desc_edit').text(data.desc);
+                $('#url_edit').text(data.url);
+                $('#image_edit').attr('src', data.url);
+                */
+               }
+        
+             // $('.alert').html(result.success);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+             alert(jqXHR.responseText);
+              // $('#errormsg').html(jqXHR.responseText);
+              $('#errormsg').html("Error");
+            }
+      
+        });
+ 
+    });  
+
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
+   
+ 
+  $('#btn_delete_image').on('click', function(e) {//edit_image
+   clearform();
+//id= $(this).attr('id');
+ 
+ 
+var urlget='{{url("cpanel/media/delete/itemid")}}';
+urlget=urlget.replace("itemid",id);
+//  alert(urlget);
+  
+        $.ajax({
+          //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
+          url: urlget,              
+          type: "GET",     
+             
+          contentType: 'application/json',
+            success: function(data){
+              $('#errormsg').html('');
+          
+               if(data.length==0){
+                $('#errormsg').html('No Data');
+               }else{
+                clearform();
+             // alert();
+              toastr.success(data); 
+              window.location.href = '{{url("cpanel/media/view")}}'; 
+               }
+        
+             // $('.alert').html(result.success);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+             alert(jqXHR.responseText);
+              // $('#errormsg').html(jqXHR.responseText);
+              $('#errormsg').html("Error");
+            }
+        
+        });   
+    });
+
+    $("#photo_edit").on("change",function(){ 
+      imageChangeForm ("#photo_edit","#fileupload_label","#image_edit");
+ /* Current this object refer to input element */    
+/* 
+ var $input = $(this);
+ var reader = new FileReader(); 
+
+ reader.onload = function(){
+       $("#image_edit").attr("src", reader.result);
+    //   var filename = $('#photo_edit')[0].files.length ? ('#photo_edit')[0].files[0].name : "";
+       var filename = $('#photo_edit').val().split('\\').pop();
+       $("#fileupload_label").text(filename );
+ } 
+ reader.readAsDataURL($input[0].files[0]); 
+ */
+
 });
+$("#btn_photo_add").on("change",function(){ 
+      imageChangeForm ("#btn_photo_add","#fileupload_label_add","#image_add");
+    });
+
+function imageChangeForm (btn_id,upload_label,imageId){ 
+ /* Current this object refer to input element */         
+ var $input = $(btn_id);
+ var reader = new FileReader(); 
+
+ reader.onload = function(){
+       $(imageId).attr("src", reader.result);
+    //   var filename = $('#photo_edit')[0].files.length ? ('#photo_edit')[0].files[0].name : "";
+       var filename = $(btn_id).val().split('\\').pop();
+       $(upload_label).text(filename );
+ } 
+ reader.readAsDataURL($input[0].files[0]);
+ 
+   }
+  });
 </script>
 @endsection
 

@@ -214,15 +214,20 @@ if ($validator->fails()) {
 if(is_null($userdb)){
   */
   $imagemodel =DB::table('media_images')->find($id);
-        
+      //  return $formdata['title'];
       //  $imagemodel->name = $formdata['name'];
-        $imagemodel->title = $formdata['title'];
-        $imagemodel->caption = $formdata['caption'];
-        $imagemodel->desc = $formdata['desc'];
-   
+        // $imagemodel->title = $formdata['title'];
+        // $imagemodel->caption = $formdata['caption'];
+        // $imagemodel->desc = $formdata['desc'];
+        MediaImage::find($id)->update([
+          "title" => $formdata["title"],
+          "caption" => $formdata["caption"],
+          "desc" => $formdata["desc"],         
+      ]);
      
         //save photo
-        if($request->hasFile('photo')){           
+        if($request->hasFile('photo')){    
+         // return 1;       
             $image_tmp=$request->file('photo');
             if($image_tmp->isValid())
             {           
@@ -239,7 +244,7 @@ if(is_null($userdb)){
               $extension=$image_tmp->getClientOriginalExtension();
               $newPath = Str::replaceLast($imagemodel->extention, $extension, $imagePath);
               $newname = Str::replaceLast($imagemodel->extention, $extension, $imagemodel->name);
-              $imagemodel->extention=  $extension;
+              // $imagemodel->extention=  $extension;
 
               //Generate new Image Name
               //Hash::make($request->password),
@@ -247,25 +252,47 @@ if(is_null($userdb)){
          
               //Upload the Image
               Image::make($image_tmp)->save($newPath);
-
-              $imagemodel->name = $newname ;
-              $imagemodel->url= $newPath;
+              // $imagemodel->name = $newname ;
+              // $imagemodel->url= $newPath;
+              MediaImage::find($id)->update([
+                "extention" => $extension, 
+                "name" =>$newname ,
+                "url" => $newPath,
+                      
+            ]);
               
             }
             
           }
-          $imagemodel->save();
+
+        //  $imagemodel->save();
        //  $user->id;
-         return redirect()->back()->with('success_message','user has been Added!');
+      //   return redirect()->back()->with('success_message','user has been Added!');
+         return response()->json('Image has been updated!');
     } 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+      //return $id;
+      $imagemodel= MediaImage::find($id);
+      //delete photo
+  
+    if (!empty($imagemodel->url)){
+      $imgpath= $imagemodel->url;
+      if(File::exists($imgpath)){
+        File::delete($imgpath);
+      }
+    }
+      if (!($imagemodel === null)) {
+        MediaImage::find($id)->delete();
+      }
+      return response()->json('Image has been deleted!');
+    // return  $this->index();
+     //   return redirect()->route('users.index');
     }
     public function filesCount(string $path)
     {
