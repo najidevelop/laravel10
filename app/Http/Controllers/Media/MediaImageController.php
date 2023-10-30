@@ -16,6 +16,7 @@ use App\Models\Media\MediaImage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Stringable;
+use Illuminate\View\View;
 
 class MediaImageController extends Controller
 {
@@ -23,7 +24,7 @@ class MediaImageController extends Controller
      /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() 
     {
       //test
        /*
@@ -39,11 +40,27 @@ return dd(  File::directories($path)) ;
     ///  $now->format('H:i:s');
          */
       //end test
-        $List = DB::table("media_images")->get();
+     
+       $List = DB::table("media_images")->paginate(6);
  
         return view("admin.media.show", ["images" => $List]);
     }
-
+    public function search(Request $text)
+    {
+       $searchtxt=$text['text'];
+       if( $searchtxt==""){
+  $List = DB::table("media_images")->get();
+       }else{
+        $List = DB::table("media_images")->where('title','like','%'.$searchtxt.'%')
+        ->orWhere('caption','like','%'.$searchtxt.'%')
+        ->orWhere('desc','like','%'.$searchtxt.'%')
+        ->orWhere('name','like','%'.$searchtxt.'%')->get();
+       }
+  
+        //$List = DB::table("media_images")->get();
+        //return dd($List);
+        return view("admin.media.search", ["images" => $List]);
+    }
     /**
      * Show the form for creating a new resource.
      */

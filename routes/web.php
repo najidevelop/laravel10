@@ -83,6 +83,7 @@ Route::prefix('/category')->group(function () {
         Route::get('/edit/{itemid}', [MediaImageController::class, 'edit']);
         Route::post('/update/{itemid}', [MediaImageController::class, 'update']);
         Route::get('/delete/{itemid}', [MediaImageController::class, 'destroy']);
+        Route::get('/search', [MediaImageController::class, 'search'])->name('cpanel.media.search');
     
        
     });

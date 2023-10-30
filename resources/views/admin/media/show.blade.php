@@ -48,18 +48,21 @@
                   Media
                 </div>
               </div>
-              <div class="card-body">
+              <div class="card-body" id="media_content">
                 <div class="row">
                  
                   @foreach ($images as $imagerow)
-                  <div class="col-sm-2">
-                    <a  data-toggle="modal"  data-target="#modal-edit" >
-                      <img  src="{{url($imagerow->url)}}" class="img-fluid mb-2 edit_image" id="{{$imagerow->id}}" onerror="this.src='{{url('defaultpic/defaultpic.jpg')}}'" alt="white sample"/>
-                  </a>
+                  <div class="col-sm-2 image_gallery"    data-toggle="modal"  data-target="#modal-edit">
+                    
+                      <img  src="{{url($imagerow->url)}}" class="img-fluid mb-2 edit_image" id="{{$imagerow->id}}" onerror="this.src='{{url('defaultpic/defaultpic.jpg')}}'" alt="white sample"  />
+                  
                   </div> 
                   @endforeach
     
                 </div>
+                {!! $images->links() !!} 
+    
+
               </div>
             </div>
           </div>
@@ -129,15 +132,16 @@
 
                     <div class="custom-file">
                       <input type="file" class="custom-file-input " name="photo" id="btn_photo_add">
-                      <label class="custom-file-label " id="fileupload_label_add" >Choose file</label>
+                      <label class="custom-file-label " for="photo">Choose file</label>
+                      <label class="col-sm-12"    id="fileupload_label_add"  ></label>
                     </div>
                    </div>
 
                   </div>
                   <div class="form-group row">
-                    <label  class="col-sm-4 col-form-label">url</label>
+                    <label  class="col-sm-4 col-form-label">Url</label>
                     <div class="col-sm-8">
-                      <label  class="col-sm-4 col-form-label">http</label>                
+                      <label  class="col-sm-4 col-form-label">-</label>                
                     </div>
                   </div>
  
@@ -232,7 +236,9 @@
 
                     <div class="custom-file">
                       <input type="file" class="custom-file-input " name="photo" id="photo_edit">
-                      <label class="custom-file-label " id="fileupload_label" for="photo">Choose file</label>
+                      <label class="custom-file-label "   for="photo" >Choose file</label>
+                      <label class="col-sm-12"  for="photo" id="fileupload_label" ></label>
+                   
                     </div>
                    </div>
 
@@ -255,10 +261,15 @@
             
             </div>
             <div class="modal-footer justify-content-between">
+              <div class="col-sm-3">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-danger" id="btn_delete_image">Delete</button>
-               
+            </div>
+              <div class="col-sm-3">
+              <button type="button" class="btn btn-danger"  id="btn_delete_image">Delete</button>
+              </div>
+              <div class="col-sm-4">
               <button type="button" id="btn_update_image" class="btn btn-primary">Save changes</button>
+            </div>
             </div>
            
           </form>
@@ -320,6 +331,7 @@
 
    //var urlval='{{route("cpanel.category.updatesort",[0]) }}';
  $('.edit_image').on('click', function(e) {//edit_image
+  
    clearform();
 id= $(this).attr('id');
  
@@ -497,6 +509,41 @@ function imageChangeForm (btn_id,upload_label,imageId){
  reader.readAsDataURL($input[0].files[0]);
  
    }
+
+
+   $('#btn_search').on('click', function(e) {//edit_image
+    e.preventDefault();
+var txt=$('#text_search').val();
+var urlget='{{url("cpanel/media/search")}}';
+        $.ajax({
+          //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
+          url: urlget,              
+          type: "Get",         
+          data:"text="+ txt,          
+            success: function(data){
+              $('#media_content').html(data);
+          
+               /* if(data.length==0){
+                $('#errormsg').html('No Data');
+               }else{
+               
+                $('#title_edit').attr('value', data.title);
+                
+               } */
+        
+             // $('.alert').html(result.success);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+             alert(jqXHR.responseText);
+              // $('#errormsg').html(jqXHR.responseText);
+              $('#errormsg').html("Error");
+            }
+        
+        });
+         
+   
+    });
+
   });
 </script>
 @endsection

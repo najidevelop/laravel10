@@ -24,11 +24,12 @@
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
-<script src="{{url('admin/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+ <script src=" {{url('admin/plugins/bootstrap/js/bootstrap.bundle.min.js')}} "></script>
+
 <!-- ChartJS -->
 <script src="{{url('admin/plugins/chart.js/Chart.min.js')}}"></script>
 <!-- Sparkline -->
-<script src="{{url('admin/plugins/sparklines/sparkline.js')}}"></script>
+ 
 <!-- JQVMap -->
 <script src="{{url('admin/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
 <script src="{{url('admin/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
@@ -46,7 +47,7 @@
 <!-- AdminLTE App -->
 <script src="{{url('admin/dist/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{url('admin/dist/js/pages/dashboard.js')}}"></script>
+ 
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('admin/dist/js/demo.js')}}"></script>
 @yield('footerscript')

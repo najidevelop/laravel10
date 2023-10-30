@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- Font Awesome -->
+
   <link rel="stylesheet" href="{{url('admin/plugins/fontawesome-free/css/all.min.css')}}">
   
   <!-- Ionicons -->
@@ -50,11 +51,12 @@
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    <form class="form-inline ml-3" name="form_search" method="GET"  id="form_search">
+     @csrf
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-navbar" type="search" name="text_search" id="text_search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
+          <button class="btn btn-navbar" type="submit" name="btn_search" id="btn_search">
             <i class="fas fa-search"></i>
           </button>
         </div>
