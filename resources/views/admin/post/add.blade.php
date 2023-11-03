@@ -122,6 +122,7 @@
                       @enderror  
                     </div>
                   </div>
+               
                     <!-- desc end -->
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label"  >Status</label>
@@ -140,6 +141,7 @@
                 <!-- /.card-footer -->
               </form>
             </div>
+         
             <!-- /.card -->
     </section>
     <!-- /.content -->
@@ -185,6 +187,7 @@ if(checkBoxes==true){
       //  alert( $("#status").prop("value"));
      //   checkBoxes.prop("checked", !checkBoxes.prop("checked"));
     });   
+    $('.textarea').summernote();
   });
 </script>
 @endsection

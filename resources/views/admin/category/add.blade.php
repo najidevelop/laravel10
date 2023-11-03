@@ -185,6 +185,7 @@ if(checkBoxes==true){
       //  alert( $("#status").prop("value"));
      //   checkBoxes.prop("checked", !checkBoxes.prop("checked"));
     });   
+    $('.textarea').summernote();
   });
 </script>
 @endsection

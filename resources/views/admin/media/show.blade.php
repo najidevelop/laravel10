@@ -513,7 +513,10 @@ function imageChangeForm (btn_id,upload_label,imageId){
 
    $('#btn_search').on('click', function(e) {//edit_image
     e.preventDefault();
-var txt=$('#text_search').val();
+    if($('#text_search').val()==''){
+      window.location.href = '{{url("cpanel/media/view")}}'; 
+    }else{
+      var txt= $('#text_search').val();
 var urlget='{{url("cpanel/media/search")}}';
         $.ajax({
           //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
@@ -537,13 +540,11 @@ var urlget='{{url("cpanel/media/search")}}';
              alert(jqXHR.responseText);
               // $('#errormsg').html(jqXHR.responseText);
               $('#errormsg').html("Error");
-            }
-        
+            }        
         });
-         
-   
-    });
+    }   
 
+    });
   });
 </script>
 @endsection
