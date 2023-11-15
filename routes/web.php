@@ -74,6 +74,7 @@ Route::prefix('/category')->group(function () {
         Route::get('/sort', [PostController::class, 'sort']);
         Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');;
         Route::get('/getsortbyid/{itemid}', [PostController::class, 'getsortbyid']) ;
+        Route::get('/search', [PostController::class, 'search'])->name('cpanel.post.search');
     });
        //Media cpanel/media
        Route::prefix('/media')->group(function () {

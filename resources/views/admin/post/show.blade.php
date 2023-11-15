@@ -39,7 +39,7 @@
              
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="post-content">
         <table id="example1" class="table table-bordered table-striped table-hover">
       
                 <thead>
@@ -74,7 +74,9 @@
            
                 </tbody>            
               </table>
+               {!! $posts->links() !!}   
         </div>
+     
         <!-- /.card-body -->
         <div class="card-footer">
           Footer
@@ -101,19 +103,53 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-      "paging": true,
+      "paging": false,
       "responsive": true,     
       "info": true,
       "autoWidth": false,
     });
     $('#example2').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
     
       "ordering": true,
       "info": true,
       "autoWidth": false,
       "responsive": true,
+    });
+    $('#btn_search').on('click', function(e) {//edit_image
+    e.preventDefault();
+    if($('#text_search').val()==''){
+      window.location.href = '{{url("cpanel/post/view")}}'; 
+    }else{
+      var txt= $('#text_search').val();
+var urlget='{{url("cpanel/post/search")}}';
+        $.ajax({
+          //  url: "{{url('cpanel/category/updatesort/',["+parentid+"])}}",   
+          url: urlget,              
+          type: "Get",         
+          data:"text="+ txt,          
+            success: function(data){
+              $('#post-content').html(data);
+          
+               /* if(data.length==0){
+                $('#errormsg').html('No Data');
+               }else{
+               
+                $('#title_edit').attr('value', data.title);
+                
+               } */
+        
+             // $('.alert').html(result.success);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+             alert(jqXHR.responseText);
+              // $('#errormsg').html(jqXHR.responseText);
+              $('#errormsg').html("Error");
+            }        
+        });
+    }   
+
     });
   });
 </script>

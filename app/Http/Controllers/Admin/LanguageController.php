@@ -1,36 +1,37 @@
 <?php
 
-namespace App\Http\Controllers\Post;
+namespace App\Http\Controllers\Language;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
  
-use App\Models\Post\Category;
-use App\Models\Post\Post;
+
+use App\Models\Admin\Language;
  
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Admin\Post\UpdatePostRequest;
-use App\Http\Requests\Admin\Post\StorePostRequest;
+use App\Http\Requests\Admin\Language\UpdateLanguageRequest;
+use App\Http\Requests\Admin\Language\StoreLanguageRequest;
  
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-class PostController extends Controller
+class LanguageController extends Controller
 {
     public function index()
     {
         //
 
-        //$List = Post::table("posts")->with('user')->get();
-        $List = Post::with('category')->paginate(6);
+        //$List = Language::table("posts")->with('user')->get();
+       
+        $List=DB::table('languages')->get();
         /*
 foreach($List as $row){
 $t=$row->category->title;
 }
 */
-        return view("admin.post.show", ["posts" => $List]);
+        return view("admin.language.show", ["languages" => $List]);
     }
 
     public function search(Request $text)
@@ -38,18 +39,18 @@ $t=$row->category->title;
        $searchtxt=$text['text'];
      
        if( $searchtxt==""){
-  $List = Post::with('category')->paginate(6);
+        $List=DB::table('languages')->get();
        }else{
-        $List = Post::with('category')->where('title','like','%'.$searchtxt.'%')
+        $List=DB::table('languages')->where('title','like','%'.$searchtxt.'%')
        // ->orWhere('caption','like','%'.$searchtxt.'%')
       //  ->orWhere('desc','like','%'.$searchtxt.'%')
-        ->orWhere('content','like','%'.$searchtxt.'%')->paginate(6);
+        ->orWhere('content','like','%'.$searchtxt.'%')->get();
        }
 
   
         //$List = DB::table("media_images")->get();
         //return dd($List);
-        return view("admin.post.search", ["posts" => $List]);
+        return view("admin.language.search", ["posts" => $List]);
     }
     public function sort()
     {
@@ -109,7 +110,7 @@ $catCont=new CategoryController();
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(StoreLanguageRequest $request)
     {
         //try{
         //  try{
@@ -146,7 +147,7 @@ $catCont=new CategoryController();
                 $tmpslug = $formdata["slug"];
             }
 
-            $object = new Post();
+            $object = new Language();
             $object->title = $formdata["title"];
             $object->content = $formdata["content"];
             $object->slug = Str::slug($tmpslug);
@@ -161,7 +162,7 @@ $catCont=new CategoryController();
             //  $user->id;
             return redirect()
                 ->back()
-                ->with("success_message", "Post has been Added!");
+                ->with("success_message", "Language has been Added!");
         }
     }
 
@@ -187,7 +188,7 @@ $catCont=new CategoryController();
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, $itemid)
+    public function update(UpdateLanguageRequest $request, $itemid)
     {
         $formdata = $request->all();
         //validate
@@ -216,7 +217,7 @@ $catCont=new CategoryController();
                 $tmpslug = $formdata["slug"];
             }
           
-            Post::find($itemid)->update([
+            Language::find($itemid)->update([
                 "title" => $formdata["title"],
                 "slug" => Str::slug($tmpslug),
                 "content" => $formdata["content"],
@@ -227,7 +228,7 @@ $catCont=new CategoryController();
             ]);
             return redirect()
                 ->back()
-                ->with("success_message", "Post has been Updated!");
+                ->with("success_message", "Language has been Updated!");
         }
     }
     /**
@@ -235,12 +236,12 @@ $catCont=new CategoryController();
      */
     public function destroy($itemid)
     {
-        $item = Post::find($itemid);
+        $item = Language::find($itemid);
         //delete photo
         if (!($item === null)) {
          
            
-            Post::find($itemid)->delete();
+            Language::find($itemid)->delete();
         }
         return redirect()->route("cpanel.post.view");
         // return  $this->index();
@@ -309,7 +310,7 @@ $catCont=new CategoryController();
     {
 
         foreach ($item as $itemrow) {
-            Post::find($itemrow["id"])->update([
+            Language::find($itemrow["id"])->update([
                 "parent_id" => $parentid,
                 "sequence" => $i,
             ]);
