@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Language;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLanguageRequest extends FormRequest
+class UpdateLanguageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,16 +14,11 @@ class StoreLanguageRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
   
        return[
-       'code'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:languages,code',   
+       'code'=>'required|regex:/^[a-zA-Z0-9\s]+$/u',   
      //  'title'=>'required|regex:/^[a-zA-Z0-9\s]+$/u|unique:categories,title',   
        'name'=>'required',   
          //     'title'=>'required|alpha_num|unique:categories,title',      

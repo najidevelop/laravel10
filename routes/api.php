@@ -4,8 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\UserController;
-//use App\Http\Controllers\Api\Admin\UserController;
+//use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\Admin\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,6 +28,8 @@ Route::prefix('/users')->group(function () {
     Route::get('/view', [UserController::class, 'index']);
     Route::get('/add', [UserController::class, 'create']);
     Route::post('/store', [UserController::class, 'store']);
- 
+   
 });
+
 });
+Route::post('activate-by-serial', [UserController::class, 'activatebyserial']);

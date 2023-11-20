@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Post\CategoryController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Media\MediaImageController;
+use App\Http\Controllers\Admin\LanguageController;
+//use App\Http\Controllers\Language\LanguageController;
 use App\Http\Middleware\Role\AdminRole;
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +74,7 @@ Route::prefix('/category')->group(function () {
         Route::post('/update/{itemid}', [PostController::class, 'update']);
         Route::get('/delete/{itemid}', [PostController::class, 'destroy']);
         Route::get('/sort', [PostController::class, 'sort']);
-        Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');;
+        Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');
         Route::get('/getsortbyid/{itemid}', [PostController::class, 'getsortbyid']) ;
         Route::get('/search', [PostController::class, 'search'])->name('cpanel.post.search');
     });
@@ -87,6 +89,19 @@ Route::prefix('/category')->group(function () {
         Route::get('/search', [MediaImageController::class, 'search'])->name('cpanel.media.search');
     
        
+    });
+//Media cpanel/language
+    Route::prefix('/language')->group(function () {
+        Route::get('/view', [LanguageController::class, 'index'])->name('cpanel.language.view');
+        Route::get('/add', [LanguageController::class, 'create']);
+        Route::post('/store', [LanguageController::class, 'store']);
+        Route::get('/edit/{itemid}', [LanguageController::class, 'edit']);
+        Route::post('/update/{itemid}', [LanguageController::class, 'update']);
+        Route::get('/delete/{itemid}', [LanguageController::class, 'destroy']);
+        Route::get('/search', [LanguageController::class, 'search'])->name('cpanel.language.search');
+        Route::get('/sort', [LanguageController::class, 'sort']);
+        Route::post('/updatesort', [LanguageController::class, 'updatesort'])->name('cpanel.language.updatesort');
+        Route::get('/getsort', [LanguageController::class, 'getsort']) ;
     });
 });
 

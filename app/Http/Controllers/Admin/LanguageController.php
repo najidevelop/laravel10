@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Language;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -24,8 +24,8 @@ class LanguageController extends Controller
         //
 
         //$List = Language::table("posts")->with('user')->get();
-       
-        $List=DB::table('languages')->get();
+        $List=  $this->selectList();
+      
         /*
 foreach($List as $row){
 $t=$row->category->title;
@@ -41,28 +41,44 @@ $t=$row->category->title;
        if( $searchtxt==""){
         $List=DB::table('languages')->get();
        }else{
-        $List=DB::table('languages')->where('title','like','%'.$searchtxt.'%')
+        $List=DB::table('languages')->where('code','like','%'.$searchtxt.'%')
        // ->orWhere('caption','like','%'.$searchtxt.'%')
       //  ->orWhere('desc','like','%'.$searchtxt.'%')
-        ->orWhere('content','like','%'.$searchtxt.'%')->get();
+        ->orWhere('name','like','%'.$searchtxt.'%')->get();
        }
 
   
         //$List = DB::table("media_images")->get();
         //return dd($List);
-        return view("admin.language.search", ["posts" => $List]);
+        return view("admin.language.search", ["languages" => $List]);
     }
     public function sort()
     {
         //
-        $catCont=new CategoryController();
-        $parents =  $catCont->selectList();
-        return view("admin.post.sort", ["categories" => $parents ]);
+         
+        $List =  $this->selectList();
+        return view("admin.language.sort", ["languages" => $List ]);
     }
-
-    public function updatesort(Request $request, $itemid)
+    public function getsort()
     {
-        //
+        $List = DB::table("languages")->where("status",1)        
+            ->select("id", "code", "name", "sequence")          
+            ->orderBy("sequence", "asc")
+            ->get();
+        $languages = collect($List);   
+        return response()->json($languages);
+    }
+    public function selectList()
+    {
+        $List = DB::table("languages")
+            ->select("id", "code", "name", "notes","sequence","status")
+            ->orderBy("sequence", "asc")
+            ->get();
+     
+        return $List;
+    }
+    public function updatesort(Request $request)
+    {
         //  $data = json_decode($request->getContent(),true);
         $data = json_decode($request->getContent(), true);
         //  $data =   $request->json()->all();
@@ -76,35 +92,17 @@ $t=$row->category->title;
     }
    // return $res;
    */
-        $this->updatetreesequence($collection, 0, (int) $itemid);
+        $this->updatetreesequence($collection, 0);
         return "Saved";
         // return response()->json(['success' => true, 'message' => $js  ]);
     }
-    public function getsortbyid($itemid)
-    {
-        $List = DB::table("posts")->where("status",1)
-        ->where("category_id",$itemid)
-            ->select("id", "title", "category_id", "sequence")
-            ->orderBy("category_id", "asc")
-            ->orderBy("sequence", "asc")
-            ->get();
-        $posts = collect($List);
-     //   $categoryTree = $this->buildCategoryTree($List, $itemid);
-        //$list= $List=DB::table('posts')->where('parent_id',$itemid)->select('id','title','parent_id')->get();
-        // return  $itemid;
-        return response()->json($posts);
-    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-       
-$catCont=new CategoryController();
-        $parents =  $catCont->selectList();
-
-        // return view('admin.user.adduser');
-        return view("admin.post.add", ["categories" => $parents]);
+    { 
+        return view("admin.language.add" );
     }
 
     /**
@@ -117,13 +115,7 @@ $catCont=new CategoryController();
         // $x=5/0;
         // validate
         $formdata = $request->all();
-        if ($formdata["slug"] == "" || empty($formdata["slug"])) {
-            $tmpslug = $formdata["title"];
-        } else {
-            $tmpslug = $formdata["slug"];
-        }
-        $formdata["slug"]=$tmpslug;
-        // return dd($formdata);
+     
         $validator = Validator::make(
             $formdata,
             $request->rules(),
@@ -141,21 +133,16 @@ $catCont=new CategoryController();
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            if ($formdata["slug"] == "" || empty($formdata["slug"])) {
-                $tmpslug = $formdata["title"];
-            } else {
-                $tmpslug = $formdata["slug"];
-            }
+          
 
             $object = new Language();
-            $object->title = $formdata["title"];
-            $object->content = $formdata["content"];
-            $object->slug = Str::slug($tmpslug);
-            $object->category_id = $formdata["parent_id"];
+            $object->code = $formdata["code"];
+            $object->name = $formdata["name"];
+           
+            $object->notes = $formdata["notes"];
             $object->sequence = 0;
             $object->status = isset($formdata["status"]) ? 1 : 0;
-            $object->createuserid = Session::get("loguser")->id;
-            $object->updateuserid = Session::get("loguser")->id;
+     
             $object->save();
             //save photo
 
@@ -175,14 +162,11 @@ $catCont=new CategoryController();
      */
     public function edit($itemid)
     {
-        $item = DB::table("posts")->find($itemid);
-        $catCont=new CategoryController();
-        $parents =  $catCont->selectList();
+        $item = DB::table("languages")->find($itemid);
+    
+
         //
-        return view("admin.post.edit", [
-            "post" => $item,
-            "categories" => $parents,
-        ]);
+        return view("admin.language.edit", ["language" => $item]);
     }
 
     /**
@@ -200,31 +184,20 @@ $catCont=new CategoryController();
             $request->messages()
         );
         if ($validator->fails()) {
-            /*
-         return redirect('/cpanel/users/add')
-         ->withErrors($validator)
-                     ->withInput();
-                     */
+         
             return redirect()
                 ->back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            //update photo
-            if ($formdata["slug"] == "" || empty($formdata["slug"])) {
-                $tmpslug = $formdata["title"];
-            } else {
-                $tmpslug = $formdata["slug"];
-            }
-          
             Language::find($itemid)->update([
-                "title" => $formdata["title"],
-                "slug" => Str::slug($tmpslug),
-                "content" => $formdata["content"],
-                "category_id" => $formdata["parent_id"],
+                "code" => $formdata["code"],
+         
+                "name" => $formdata["name"],
+                "notes" => $formdata["notes"],
                 //'sequence' => $formdata['sequence'],
                 "status" => isset($formdata["status"]) ? 1 : 0,
-                "updateuserid" => Session::get("loguser")->id,
+                
             ]);
             return redirect()
                 ->back()
@@ -239,11 +212,9 @@ $catCont=new CategoryController();
         $item = Language::find($itemid);
         //delete photo
         if (!($item === null)) {
-         
-           
             Language::find($itemid)->delete();
         }
-        return redirect()->route("cpanel.post.view");
+        return redirect()->route("cpanel.language.view");
         // return  $this->index();
         //   return redirect()->route('users.index');
     }
@@ -255,87 +226,18 @@ $catCont=new CategoryController();
     }
 
     protected $parentcollection;
-    protected $sonscollection;
-   
-
- 
-  
-  
-    public function updateParentofSons($categoryId, $newParentId)
-    {
-        if ($categoryId != null) {
-            $sons = DB::table("posts")
-                ->where("parent_id", $categoryId)
-                ->update([
-                    "parent_id" => $newParentId,
-                ]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function buildCategoryTree($posts, $parentId = 0)
-    {
-        $result = new Collection();
-
-        foreach ($posts as $category) {
-            if ($category->parent_id == $parentId) {
-                $children = $this->buildCategoryTree(
-                    $posts,
-                    $category->id
-                );
-
-                if ($children->isNotEmpty()) {
-                    $category->children = $children;
-                }
-
-                $result->push($category);
-            }
-        }
-
-        return $result;
-    }
-
-    function getCategorysons($posts, $parentId)
-    {
-        foreach ($posts as $category) {
-            if ($category->parent_id == $parentId) {
-                $this->sonscollection->push($category->id);
-                $this->getCategorysons($posts, $category->id);
-            }
-        }
-    }
-    public function updatetreesequence($item, int $i, $parentid)
+    protected $sonscollection; 
+    public function updatetreesequence($item, int $i)
     {
 
         foreach ($item as $itemrow) {
             Language::find($itemrow["id"])->update([
-                "parent_id" => $parentid,
+              //  "parent_id" => $parentid,
                 "sequence" => $i,
             ]);
             $i++;
-            /*
-            if (
-                isset($itemrow["children"]) &&
-                count($itemrow["children"]) > 0
-            ) {
-                $this->updatetreesequence(
-                    $itemrow["children"],
-                    $i,
-                    $itemrow["id"]
-                );
-            }
-            */
+            
         }
     }
-    public function getsonsid($itemid)
-    {
-        $this->sonscollection = new Collection();
-        $List = DB::table("posts")
-            ->select("id", "parent_id")
-            ->get();
-        $categoriesAll = collect($List);
-        $this->getCategorysons($categoriesAll, $itemid);
-    }
+   
 }

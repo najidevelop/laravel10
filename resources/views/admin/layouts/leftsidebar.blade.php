@@ -49,13 +49,13 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ url('/cpanel/users/view') }}" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa fa-list-alt nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('/cpanel/users/add') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa fa-plus-square nav-icon"></i>
                   <p>Add</p>
                 </a>
               </li>
@@ -142,17 +142,47 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ url('/cpanel/media/view') }}" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa fa-list-alt nav-icon"></i>
                   <p>View</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('/cpanel/media/add') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="far fa fa-plus-square nav-icon"></i>
                   <p>Add</p>
                 </a>
               </li>
              
+            </ul>
+          </li>
+          <li class="nav-item has-treeview ">
+            <a href="#" class="nav-link ">
+               
+              <i class="nav-icon far fa fa-language" aria-hidden="true"  ></i>
+              <p>
+             Languages
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('/cpanel/language/view') }}" class="nav-link ">
+                  <i class="far fa fa-list-alt nav-icon"></i>
+                  <p>View</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/cpanel/language/add') }}" class="nav-link">
+                  <i class="far fa fa-plus-square nav-icon"></i>
+                  <p>Add</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/cpanel/language/sort') }}" class="nav-link">
+                  <i class="far fa fa-sort nav-icon"></i>
+                  <p>Sorting</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
