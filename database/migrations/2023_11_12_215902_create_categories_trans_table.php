@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('categories_trans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('main_id')->nullable();
-            $table->unsignedBigInteger('lang_id')->nullable();
+            // $table->unsignedBigInteger('main_id')->nullable();
+            // $table->unsignedBigInteger('lang_id')->nullable();
+            
             $table->string('title')->nullable();   
             $table->text('desc')->nullable();
         
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories_trans');
+        Schema::dropIfExists('categories_trans');//CategoryTrans
     }
 };

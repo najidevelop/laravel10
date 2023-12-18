@@ -13,7 +13,7 @@
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/cpanel') }}">Home</a></li>
               <li class="breadcrumb-item active">Languages</li>
-              <li class="breadcrumb-item active">Add</li>
+              <li class="breadcrumb-item active">Sort</li>
             </ol>
           </div>
         </div>

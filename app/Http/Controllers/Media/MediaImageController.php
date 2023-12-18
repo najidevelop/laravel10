@@ -41,7 +41,7 @@ return dd(  File::directories($path)) ;
          */
       //end test
      
-       $List = DB::table("media_images")->paginate(6);
+       $List = DB::table("media_images")->paginate(24);
  
         return view("admin.media.show", ["images" => $List]);
     }

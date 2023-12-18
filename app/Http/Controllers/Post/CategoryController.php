@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Post;
 use App\Models\Post\Category;
 use App\Http\Controllers\Controller;
+use App\Models\Post\CategoriesTrans;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\Model;
 class CategoryController extends Controller
 {
     public function index()
@@ -150,6 +152,31 @@ class CategoryController extends Controller
             "category" => $item,
             "categories" => $parents,
         ]);
+    }
+    public function trans($itemid,$lang)
+    {
+     //  $item = DB::table("categories")->find($itemid);
+     
+       $List =CategoriesTrans:: with("category") ->with("language")->where("main_id", $itemid)
+      
+    // ->whereHas('language',function($q)use ($lang){
+    //     $q->where("code",$lang);
+    //   })
+          -> get();
+        
+       $item= $List->where("language.code",$lang)->first();
+       $rList = DB::table("categories")
+       ->select("id", "title", "desc", "parent_id")
+       ->get();
+
+   $parents = $this->categorytree($rList);
+      //  return   $List  ;
+    //   return  $item;
+        return view("admin.category.trans", [
+            "category_trans" =>  $item,
+            "categories" => $parents,
+        ]);
+
     }
 
     /**

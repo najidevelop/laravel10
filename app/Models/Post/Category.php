@@ -23,4 +23,9 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+    public function categories_trans(): HasMany
+    {
+        return $this->hasMany(CategoriesTrans::class, 'main_id');
+    }
+   
 }

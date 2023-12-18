@@ -63,6 +63,7 @@ Route::prefix('/category')->group(function () {
     Route::get('/sort', [CategoryController::class, 'sort']);
     Route::post('/updatesort/{itemid}', [CategoryController::class, 'updatesort'])->name('cpanel.category.updatesort');
     Route::get('/getsortbyid/{itemid}', [CategoryController::class, 'getsortbyid']);
+    Route::get('/trans/{itemid}/{lang}', [CategoryController::class, 'trans']);
 });
 
     //Post cpanel/post
@@ -102,6 +103,7 @@ Route::prefix('/category')->group(function () {
         Route::get('/sort', [LanguageController::class, 'sort']);
         Route::post('/updatesort', [LanguageController::class, 'updatesort'])->name('cpanel.language.updatesort');
         Route::get('/getsort', [LanguageController::class, 'getsort']) ;
+  
     });
 });
 

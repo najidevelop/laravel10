@@ -33,7 +33,16 @@ $t=$row->category->title;
 */
         return view("admin.language.show", ["languages" => $List]);
     }
-
+    public   function langshowlist()
+    {
+        $List = DB::table("languages")
+        ->select("id", "code", "name", "notes","sequence","status","image","htmlcode")
+        ->orderBy("sequence", "asc")
+        ->get();
+ 
+    return $List;
+       
+    }
     public function search(Request $text)
     {
        $searchtxt=$text['text'];
@@ -71,7 +80,7 @@ $t=$row->category->title;
     public function selectList()
     {
         $List = DB::table("languages")
-            ->select("id", "code", "name", "notes","sequence","status")
+            ->select("id", "code", "name", "notes","sequence","status","image","htmlcode")
             ->orderBy("sequence", "asc")
             ->get();
      
@@ -142,7 +151,9 @@ $t=$row->category->title;
             $object->notes = $formdata["notes"];
             $object->sequence = 0;
             $object->status = isset($formdata["status"]) ? 1 : 0;
-     
+            $object->image = $formdata["image"];
+            $object->htmlcode = $formdata["htmlcode"];
+            
             $object->save();
             //save photo
 
@@ -164,7 +175,9 @@ $t=$row->category->title;
     {
         $item = DB::table("languages")->find($itemid);
     
-
+if($item->image== null){
+    $item->image="";
+}
         //
         return view("admin.language.edit", ["language" => $item]);
     }
@@ -197,7 +210,8 @@ $t=$row->category->title;
                 "notes" => $formdata["notes"],
                 //'sequence' => $formdata['sequence'],
                 "status" => isset($formdata["status"]) ? 1 : 0,
-                
+                 "image" => $formdata["image"],
+                 "htmlcode" => $formdata["htmlcode"],
             ]);
             return redirect()
                 ->back()

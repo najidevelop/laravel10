@@ -90,6 +90,45 @@
                        @enderror  
                      </div>
                    </div>
+
+                   <div class="form-group row">
+                    <label for="image" class="col-sm-2 col-form-label">Image URL</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control 
+                      @error('image')  is-invalid  @enderror "
+                        name="image" id="image" placeholder="image" 
+                         @if ($errors->any()) 
+                        value="{{old('image')}}" @else value="{{$language->image}}"
+                        @endif  
+                        @error('image')  
+                      describedby="image-error" aria-invalid="true"  
+                      @enderror                  
+                      >
+                      @error('image')  
+                       <span id="image-error" class="error invalid-feedback">{{ $message }}</span>
+                       @enderror                  
+                    </div>
+                  </div>
+          
+                  <div class="form-group row">
+                    <label for="htmlcode" class="col-sm-2 col-form-label">Html Icon</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control 
+                      @error('htmlcode')  is-invalid  @enderror "
+                        name="htmlcode" id="htmlcode" placeholder="htmlcode" 
+                         @if ($errors->any()) 
+                        value="{{old('htmlcode')}}" @else value="{{$language->htmlcode}}"
+                        @endif  
+                        @error('htmlcode')  
+                      describedby="htmlcode-error" aria-invalid="true"  
+                      @enderror                  
+                      >
+                      @error('htmlcode')  
+                       <span id="htmlcode-error" class="error invalid-feedback">{{ $message }}</span>
+                       @enderror                  
+                    </div>
+                  </div>
+          
                      <!-- desc end -->
                      <div class="form-group row">
                       <label class="col-sm-2 col-form-label"  >Status</label>
@@ -99,7 +138,13 @@
                       </div>
                     </div>
                            </div>
-                 
+                           <div class="row">
+                            <div class="col-sm-2"  >
+                            </div>        
+                          <div class="col-sm-2"  >
+                            <img src="{{url($language->image)}}" class="img-fluid mb-2"  >
+                          </div>
+                          </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
@@ -107,6 +152,7 @@
                 </div>
                 <!-- /.card-footer -->
               </form>
+              
             </div>
             <!-- /.card -->
     </section>

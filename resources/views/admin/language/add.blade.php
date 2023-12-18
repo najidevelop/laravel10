@@ -29,16 +29,7 @@
               <div class="card-header">
                 <h3 class="card-title">Add Language</h3>
               </div>
-              @if ($errors->any())
-              <div class="alert alert-danger">
-                  <ul>
-                  
-                      @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                      @endforeach
-                  </ul>
-              </div>
-              @endif
+            
               <!-- form start -->
               <form class="form-horizontal" action="{{url('/cpanel/language/store')}}" enctype="multipart/form-data" method="POST" name="store_language_form" id="store_language_form">
                 @csrf
@@ -93,7 +84,39 @@
                       @enderror  
                     </div>
                   </div>
-               
+                <!-- name end -->
+                <div class="form-group row">
+                  <label for="image" class="col-sm-2 col-form-label">Image URL</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control 
+                    @error('image')  is-invalid  @enderror "
+                      name="image" id="image" placeholder="Language" value="{{old('image')}}"
+                      @error('slug')  
+                    describedby="image-error" aria-invalid="true"  
+                    @enderror                  
+                    >
+                    @error('image')  
+                     <span id="image-error" class="error invalid-feedback">{{ $message }}</span>
+                     @enderror                  
+                  </div>
+                </div>
+
+                 <!-- name end -->
+                 <div class="form-group row">
+                  <label for="htmlcode" class="col-sm-2 col-form-label">Html Icon</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control 
+                    @error('htmlcode')  is-invalid  @enderror "
+                      name="htmlcode" id="htmlcode" placeholder="Language" value="{{old('htmlcode')}}"
+                      @error('htmlcode')  
+                    describedby="htmlcode-error" aria-invalid="true"  
+                    @enderror                  
+                    >
+                    @error('htmlcode')  
+                     <span id="htmlcode-error" class="error invalid-feedback">{{ $message }}</span>
+                     @enderror                  
+                  </div>
+                </div>
                     <!-- desc end -->
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label"  >Status</label>
