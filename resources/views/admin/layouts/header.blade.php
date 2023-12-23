@@ -192,7 +192,13 @@ use App\Http\Controllers\Admin\LanguageController;
 
       <li class="nav-item dropdown">
         <a class="nav-link" id="selected-lang" data-toggle="dropdown" href="#" aria-expanded="false">
-          Lang
+          @if(isset($lang))
+          {{ $languagelist->where("code",$lang)->first()->name }}
+             
+              @else
+Lang
+          @endif
+          
         </a>
         <div class="dropdown-menu dropdown-menu-right p-0" style="left: inherit; right: 0px;">
          

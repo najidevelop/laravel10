@@ -64,6 +64,7 @@ Route::prefix('/category')->group(function () {
     Route::post('/updatesort/{itemid}', [CategoryController::class, 'updatesort'])->name('cpanel.category.updatesort');
     Route::get('/getsortbyid/{itemid}', [CategoryController::class, 'getsortbyid']);
     Route::get('/trans/{itemid}/{lang}', [CategoryController::class, 'trans']);
+    Route::post('/storetrans/{itemid}/{lang}', [CategoryController::class, 'storeupdatetrans']);
 });
 
     //Post cpanel/post
@@ -78,6 +79,8 @@ Route::prefix('/category')->group(function () {
         Route::post('/updatesort/{itemid}', [PostController::class, 'updatesort'])->name('cpanel.post.updatesort');
         Route::get('/getsortbyid/{itemid}', [PostController::class, 'getsortbyid']) ;
         Route::get('/search', [PostController::class, 'search'])->name('cpanel.post.search');
+        Route::get('/trans/{itemid}/{lang}', [PostController::class, 'trans']);
+        Route::post('/storetrans/{itemid}/{lang}', [PostController::class, 'storeupdatetrans']);
     });
        //Media cpanel/media
        Route::prefix('/media')->group(function () {

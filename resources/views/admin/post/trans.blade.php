@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Categories</h1>
+            <h1>Posts</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/cpanel') }}">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item active">Posts</li>
             </ol>
           </div>
         </div>
@@ -26,14 +26,22 @@
        <!-- Horizontal Form -->
       <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Edit Category</h3>
+                <h3 class="card-title">Edit Posts</h3>
               </div>
            
-       
+              @if ($errors->any())
+              <div class="alert alert-danger">
+                  <ul>
+                  
+                      @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+              </div>
+              @endif
               <!-- /.card-header -->
               <!-- form start -->
-              <form class="form-horizontal" action="{{url('/cpanel/category/storetrans',[$main_id,$lang])}}"
-               enctype="multipart/form-data" method="POST" name="store_category_form" id="store_category_form">
+              <form class="form-horizontal" action="{{url('/cpanel/post/update',[$post->id])}}" enctype="multipart/form-data" method="POST" name="store_category_form" id="store_category_form">
                 @csrf
                 <div class="card-body">
                   <div class="card-body">
@@ -45,7 +53,7 @@
                        @error('title')  is-invalid  @enderror "
                          name="title" id="title" placeholder="* title" 
                          @if ($errors->any()) 
-                         value="{{old('title')}}" @else value="{{$category_trans->title}}"
+                         value="{{old('title')}}" @else value="{{$post->title}}"
                          @endif  
                         
                          @error('title')  
@@ -66,7 +74,7 @@
                          @error('slug')  is-invalid  @enderror "
                            name="slug" id="slug" placeholder="slug" 
                             @if ($errors->any()) 
-                           value="{{old('slug')}}" @else value="{{$category_trans->category->slug}}"
+                           value="{{old('slug')}}" @else value="{{$post->slug}}"
                            @endif  
                            @error('slug')  
                          describedby="slug-error" aria-invalid="true"  
@@ -87,12 +95,15 @@
                          @error('parent_id')  
                          describedby="parent_id-error" aria-invalid="true"  
                          @enderror  >
-                         <option value="0" @if(old('parent_id')==0) selected="selected" @elseif($category_trans->category->parent_id=="0" && !$errors->any() )selected="selected"@endif >-</option>
+                         <option value="0" @if(old('parent_id')==0) selected="selected" @elseif($post->category_id=="0" && !$errors->any() )selected="selected"@endif >-</option>
                          @if(!empty($categories))
                          @foreach($categories as $categoryRow)
-@if($categoryRow->last()->id!=$category_trans->category->id)
-                           <option value="{{$categoryRow->last()->id}}" @if(old('parent_id')==$categoryRow->last()->id) selected="selected"  @elseif ($category_trans->category->parent_id==$categoryRow->last()->id && !$errors->any()) selected="selected" @endif >
-                      
+@if($categoryRow->last()->id==$post->category_id)
+                           <option value="{{$categoryRow->last()->id}}" @if(old('parent_id')==$categoryRow->last()->id) selected="selected"  @elseif ($post->category_id==$categoryRow->last()->id && !$errors->any()) selected="selected" @endif >
+                            @elseif ($categoryRow->last()->id!=$post->category_id)
+                            <option value="{{$categoryRow->last()->id}}" @if(old('parent_id')==$categoryRow->last()->id) selected="selected"  @endif >
+                
+                            @endif
                              @foreach($categoryRow as $parent)                        
                              {{ $parent->title }}
                              @if ($categoryRow->last()->id!=$parent->id)
@@ -101,7 +112,8 @@
                             
                              @endforeach                     
                            </option>
-                           @endif
+
+                         
                            @endforeach
                            @endif
                          </select>
@@ -115,13 +127,13 @@
                          <!-- desc start -->
                
                          <div class="form-group row">
-                     <label for="desc" class="col-sm-2 col-form-label">Descreption</label>
+                     <label for="content" class="col-sm-2 col-form-label">Contents</label>
                      <div class="col-sm-10">
-                       <textarea class="textarea" name="desc"  id="desc" placeholder="Place some text here"
-                       style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">@if($errors->any()){{old('desc')}}@else{{$category_trans->desc}}@endif</textarea>
+                       <textarea class="textarea" name="content"  id="content" placeholder="Place some text here"
+                       style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">@if($errors->any()){{old('content')}}@else{{$post->content}}@endif</textarea>
                      
-                       @error('desc')  
-                       <span id="desc-error" class="error invalid-feedback">{{ $message }}</span>
+                       @error('content')  
+                       <span id="content-error" class="error invalid-feedback">{{ $message }}</span>
                        @enderror  
                      </div>
                    </div>
@@ -129,8 +141,8 @@
                      <div class="form-group row">
                       <label class="col-sm-2 col-form-label"  >Status</label>
                       <div class="custom-control custom-switch col-sm-10" >                    
-                        <input type="checkbox" class="custom-control-input" id="status" name="status"  @if($errors->any())  @if(old('status')==1)checked="checked" @endif @else  @if($category_trans->category->status==1)checked="checked" @endif @endif >  
-                        <label class="custom-control-label" for="status" id="status_lbl">@if($errors->any())  @if(old('status')==1)Published @else Draft @endif @else  @if($category_trans->category->status==1)Published @else Draft @endif @endif</label> 
+                        <input type="checkbox" class="custom-control-input" id="status" name="status"  @if($errors->any())  @if(old('status')==1)checked="checked" @endif @else  @if($post->status==1)checked="checked" @endif @endif >  
+                        <label class="custom-control-label" for="status" id="status_lbl">@if($errors->any())  @if(old('status')==1)Published @else Draft @endif @else  @if($post->status==1)Published @else Draft @endif @endif</label> 
                       </div>
                     </div>
                            </div>
@@ -138,7 +150,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-info">Save</button>
-                  <a class="btn btn-default float-right" href="{{url('cpanel/category/view')}}">Cancel</a>
+                  <a class="btn btn-default float-right" href="{{url('cpanel/post/view')}}">Cancel</a>
                 </div>
                 <!-- /.card-footer -->
               </form>
@@ -189,21 +201,6 @@ if(checkBoxes==true){
      //   checkBoxes.prop("checked", !checkBoxes.prop("checked"));
     }); 
     $('.textarea').summernote();
-
-    $('.langrow').click(function(e){
-
-
-
-//alert (langcode);
-//var langName=$(this).html();
-
-
-var urltransget='{{url("cpanel/category/trans/itemid/lang")}}';
-urltransget=urltransget.replace("itemid",'{{$main_id}}');
-urltransget=urltransget.replace("lang",langcode);
-window.location.replace(urltransget);
-//alert (urltransget);
-  });
 });
 </script>
 @endsection

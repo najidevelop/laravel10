@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Post;
+use App\Models\Admin\Language;
 use App\Models\Post\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Post\CategoriesTrans;
@@ -8,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
 use App\Http\Requests\Admin\Category\StoreCategoryRequest;
+use App\Http\Requests\Admin\Category\StoreCategoryTransRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -165,6 +167,17 @@ class CategoryController extends Controller
           -> get();
         
        $item= $List->where("language.code",$lang)->first();
+       if( $item=== null){
+        $item = new CategoriesTrans();      
+    $item->title="";
+    $item->desc="";
+    $item->id=0;
+    $item->main_id=0;
+    $item->lang_id=0;
+   
+}
+       
+      
        $rList = DB::table("categories")
        ->select("id", "title", "desc", "parent_id")
        ->get();
@@ -175,6 +188,8 @@ class CategoryController extends Controller
         return view("admin.category.trans", [
             "category_trans" =>  $item,
             "categories" => $parents,
+            "main_id" => $itemid,
+            "lang" =>  $lang,
         ]);
 
     }
@@ -405,5 +420,72 @@ class CategoryController extends Controller
         $parents = $this->categorytree($List);
         // return view('admin.user.adduser');
         return  $parents;
+    }
+
+    public function storeupdatetrans(StoreCategoryTransRequest $request, $itemid,$langcode)
+    {
+        //try{
+        //  try{
+        // $x=5/0;
+        // validate
+        $formdata = $request->all();
+        // return dd($formdata);
+        $validator = Validator::make(
+            $formdata,
+            $request->rules(),
+            $request->messages()
+        );
+
+        if ($validator->fails()) {
+            /*
+    return redirect('/cpanel/users/add')
+    ->withErrors($validator)
+                ->withInput();
+                */
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            if ($formdata["slug"] == "" || empty($formdata["slug"])) {
+                $tmpslug = $formdata["title"];
+            } else {
+                $tmpslug = $formdata["slug"];
+            }
+            //find lang id by lang code
+            $langobj=Language::where("code",$langcode)->first();
+            //find trans
+$dbobject=  CategoriesTrans::where("main_id",$itemid)->where("lang_id",$langobj->id)->first();
+if($dbobject===null){
+// new add
+    $object = new CategoriesTrans();
+    $object->title = $formdata["title"];
+    $object->desc = $formdata["desc"];
+    $object->main_id = $itemid;
+    $object->lang_id = $langobj->id;
+ //   $object->slug = Str::slug($tmpslug);
+   // $object->parent_id = $formdata["parent_id"];
+ //   $object->sequence = 0;
+//    $object->status = isset($formdata["status"]) ? 1 : 0;
+  
+    $object->save();
+}else{
+    //update
+    CategoriesTrans::find($dbobject->id)->update([
+        "title" => $formdata["title"],
+        
+        "desc" => $formdata["desc"],
+        "main_id" =>$itemid ,
+        "lang_id" =>  $langobj->id,
+    ]);
+}
+            //save photo
+
+            //  $user->id;
+            return redirect()
+                ->back()
+                ->with("success_message", "Category has been Added!");
+        }
     }
 }

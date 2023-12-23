@@ -2,25 +2,23 @@
 
 namespace App\Models\Post;
 
-use App\Models\Admin\Language;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Admin\Language;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
- 
-class CategoriesTrans extends Model
+class PostsTrans extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'title',  
-        'desc',
+        'content',
         'main_id',
         'lang_id', 
           
     ];
-public function category(): BelongsTo
+    public function post(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'main_id')->withDefault();
+        return $this->belongsTo(Post::class, 'main_id')->withDefault();
     }
     public function language(): BelongsTo
     {
